@@ -74,7 +74,7 @@ const Sidebar = () => {
                     <div className="flex justify-between text-sm font-semibold">
                         Kotak Masuk
                         <button onClick={toggleKotakMasuk} className={` rounded-full text-lg transition-transform duration-300 ${kotakMasuk ? 'rotate-90' : '-rotate-90'}`}>
-                            <img src={svg.right} />
+                            <img src={svg.arrow} />
                         </button>
                     </div>
                     {kotakMasuk && (
@@ -93,7 +93,7 @@ const Sidebar = () => {
                     <div className="flex justify-between text-sm font-semibold">
                         Pembelian
                         <button onClick={togglePembelian} className={` rounded-full text-lg transition-transform duration-300 ${pembelian ? 'rotate-90' : '-rotate-90'}`}>
-                            <img src={svg.right} />
+                            <img src={svg.arrow} />
                         </button>
                     </div>
                     {pembelian && (
@@ -108,7 +108,7 @@ const Sidebar = () => {
                     <div className="flex justify-between text-sm font-semibold">
                         Profile Saya
                         <button onClick={toggleProfile} className={` rounded-full text-lg transition-transform duration-300 ${profile ? 'rotate-90' : '-rotate-90'}`}>
-                            <img src={svg.right} />
+                            <img src={svg.arrow} />
                         </button>
                     </div>
                     {profile && (
