@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { image } from "../../../assets";
 import Userlayouts from "../../../components/layouts/user";
 
@@ -20,17 +21,17 @@ const UserSettings = () => {
 
           <div className="grid grid-cols-2 text-sm w-2/3">
             <p className="text-gray-600">Nama</p>
-            <p className="text-gray-800 font-medium">Abya laxx <a href="#" className="text-green-500">Ubah</a></p>
+            <p className="text-gray-800 font-medium">Abya laxx <Link to="#" className="text-green-500">Ubah</Link></p>
           </div>
 
           <div className="grid grid-cols-2 text-sm w-2/3">
             <p className="text-gray-600">Tanggal Lahir</p>
-            <a href="#" className="text-green-500">Tambah Tanggal Lahir</a>
+            <Link to="#" className="text-green-500">Tambah Tanggal Lahir</Link>
           </div>
 
           <div className="grid grid-cols-2 text-sm w-2/3">
             <p className="text-gray-600">Jenis Kelamin</p>
-            <a href="#" className="text-[#00AA5B]">Tambah Jenis Kelamin</a>
+            <Link to="#" className="text-[#00AA5B]">Tambah Jenis Kelamin</Link>
           </div>
 
         </div>
@@ -46,13 +47,13 @@ const UserSettings = () => {
               <span className="text-xs font-semibold text-[#00AA5B] bg-green-100 px-2 mx-2 py-1 rounded-full">
                 Terverifikasi
               </span>
-              <a href="#" className="text-[#00AA5B] text-sm">Ubah</a>
+              <Link to="#" className="text-[#00AA5B] text-sm">Ubah</Link>
             </p>
           </div>
 
           <div className="grid grid-cols-2 w-2/3">
             <p className="text-gray-600">Nomor HP</p>
-            <a href="#" className="text-green-600">Tambah Nomor HP</a>
+            <Link to="#" className="text-green-600">Tambah Nomor HP</Link>
           </div>
         </div>
       </div>

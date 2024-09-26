@@ -1,18 +1,55 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
+
+    const navigate = useNavigate();
+    const [formState, setFormState] = useState({
+        email: "",
+        password: "pass"
+    })
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
+        e.preventDefault();
+        setFormState({
+            ...formState,
+            [type]: e.target.value
+        })
+    }
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const response = await fetch('http://localhost:4000/api/verify/login', {
+            method: "post",
+            credentials: "include",
+            headers: {
+                // needed so express parser says OK to read
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: formState.email.split("@")[0],
+                email: formState.email,
+                password: formState.password
+            })
+        })
+        if (response.status !== 200) {
+            return alert("Something went wrong");
+        }
+        navigate("/");
+    }
+
     return (
         <div className="bg-white drop-shadow-full p-10 max-w-[400px]  rounded-xl xl:w-2/3 lg:w-1/3 md:w-1/2  sm:w-2/3">
-            <div className="flex justify-between my-8">
+            <div className="flex justify-between items-center my-8">
                 <h2 className="text-2xl font-semibold">Masuk ke Tokopedia</h2>
-                <a href="" className="text-[#00AA5B]">Daftar</a>
+               <Link to="/auth/register" className="text-[#00AA5B] text-sm font-bold text-end">Daftar</Link>
             </div>
-            <form className="w-full">
-                <input type="text" placeholder="Nomor HP atau Email" className="border border-gray-400 w-full p-3 focus:outline-none focus:ring-1 focus:ring-green-500 rounded" />
-                <p className="text-xs text-slate-500 font-medium mt-0">Contoh: 08123243489</p>
+            <form className="w-full" onSubmit={(e) => onSubmit(e)}>
+                <input type="email" name="email" placeholder="Masukkan Email" onChange={(e) => onChange(e, "email")} className="border border-gray-400 w-full p-3 focus:outline-none focus:ring-1 focus:ring-green-500 rounded" />
+                <p className="text-xs text-slate-500 font-medium mt-0">Contoh: example@gmail.com</p>
                 <div className="flex flex-col items-end">
-                    <a href="" className="text-[#00AA5B] w-full text-sm font-bold text-end">Butuh Bantuan?</a>
+                   <Link to="" className="text-[#00AA5B] w-full text-sm font-bold text-end">Butuh Bantuan?</Link>
                 </div>
-                <button className="bg-[#00AA5B] text-white w-full p-2 rounded-xl my-3 font-semibold text-lg">Selanjutnya</button>
+                <button type="submit" className="bg-[#00AA5B] text-white w-full p-2 rounded-xl my-3 font-semibold text-lg">Selanjutnya</button>
             </form>
             <div className="flex justify-between items-center gap-2 my-3">
                 <hr className="border w-1/3 border-slate-300" />

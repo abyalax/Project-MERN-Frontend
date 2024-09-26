@@ -7,6 +7,8 @@ import store from "./img/store.png"
 import bill from "./img/bill.png"
 import invoice from "./img/invoice.png"
 import pci from "./img/pci-dss.png"
+import ISO from "./img/ISOIEC-27001.png"
+import footerTokopedia from "./img/footer-tokopedia.png"
 
 import card from "./svg/credit-card.svg"
 import cart from "./svg/cart.svg"
@@ -23,6 +25,17 @@ import phone from "./svg/phone.svg"
 import detail from "./svg/three-dots-vertical.svg"
 import all from "./svg/all.svg"
 import star from "./svg/star.svg"
+import facebook from "./svg/facebook.svg"
+import twitter from "./svg/twitter.svg"
+import pinterest from "./svg/pinterest.svg"
+import instagram from "./svg/instagram.svg"
+import googlePlay from "./svg/google-play.svg"
+import apple from "./svg/apple.svg"
+import bag from "./svg/bag.svg"
+import square from "./svg/square.svg"
+import geo from "./svg/geo.svg"
+import clock from "./svg/clock.svg"
+import truck from "./svg/truck.svg"
 
 import a from "./banners/1.png"
 import b from "./banners/2.png"
@@ -42,11 +55,15 @@ import c2 from "./img/product/Paket Perawatan/2.jpg"
 import c3 from "./img/product/Paket Perawatan/3.png"
 
 const svg = {
-    card, cart, person, arrow, arrowC, secure, google, scan, search, notification, mail, phone, detail, all, star
+    card, cart, person, arrow, arrowC, secure, google,
+    scan, search, notification, mail, phone, detail,
+    all, star, facebook, twitter, pinterest, instagram,
+    googlePlay, apple, bag, square, geo, clock, truck
 }
 
 const image = {
-    gopay, money, bgAuth, profile, tokopedia, store, bill, invoice, pci
+    gopay, money, bgAuth, profile, tokopedia, store, bill, 
+    invoice, pci, ISO, footerTokopedia
 }
 
 const banners = [a, b, c, d]
@@ -62,5 +79,6 @@ const productImage = {
         c1, c2, c3
     ]
 }
+
 
 export { svg, image, banners, productImage }

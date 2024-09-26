@@ -1,11 +1,16 @@
 import Category from "../components/fragments/category";
-import Navbar from "../components/fragments/navbar";
 import dataProduct, { dataProductType } from "../assets/img/product";
 import { svg } from "../assets";
 import { useEffect, useState } from "react";
 import Footer from "../components/fragments/footer";
+import Navbar from "../components/fragments/navbar";
 
-const Home = () => {
+interface HomeProps {
+  data?: {email: string} | null
+}
+
+const Home = ( {data} : HomeProps) => {
+
   const [product, setProduct] = useState<dataProductType[]>([])
 
   useEffect(() => {
@@ -25,9 +30,14 @@ const Home = () => {
     setProduct(dataProduct)
   }
 
+  const formatURL = (item: string) => {
+    return item.trim().replace(/\s+/g, '-').toLowerCase()
+  }
+
+
   return (
     <>
-      <Navbar />
+      <Navbar data={data} />
       <Category />
       <section className="px-40 py-10 border-t-8 border-slate-200">
         <div className="flex gap-3">
@@ -38,7 +48,7 @@ const Home = () => {
         </div>
         <div className="grid grid-cols-6 gap-3">
           {product.map((item) => (
-            <div key={item.id} className="h-[330px] w-full pb-3 border-2 border-slate-200 rounded-lg">
+            <div onClick={() => window.location.href = `/${formatURL(item.storeName)}/${formatURL(item.name)}`} key={item.id} className="h-[330px] w-full pb-3 border-2 border-slate-200 rounded-lg cursor-pointer">
               <img src={item.image} className="w-full h-48 object-cover object-center rounded-t-lg" />
               <div className="px-2 pt-1 pb-4 flex flex-col gap-1">
                 <p className="text-sm">{item.name.length > 48 ? item.name.substring(0, 40) + '...' : item.name}</p>

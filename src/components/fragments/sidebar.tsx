@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { svg, image } from "../../assets";
 import { useState } from "react"
 
@@ -79,12 +80,12 @@ const Sidebar = () => {
                     </div>
                     {kotakMasuk && (
                         <div className="text-sm pl-4 flex flex-col">
-                            <a href="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Chat</a>
-                            <a href="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Diskusi Produk</a>
-                            <a href="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Ulasan</a>
-                            <a href="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Pesan Bantuan</a>
-                            <a href="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Pesanan Dikomplain</a>
-                            <a href="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Update</a>
+                            <Link to="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Chat</Link>
+                            <Link to="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Diskusi Produk</Link>
+                            <Link to="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Ulasan</Link>
+                            <Link to="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Pesan Bantuan</Link>
+                            <Link to="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Pesanan Dikomplain</Link>
+                            <Link to="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Update</Link>
                         </div>
                     )}
                 </div>
@@ -98,8 +99,8 @@ const Sidebar = () => {
                     </div>
                     {pembelian && (
                         <div className="text-sm pl-4 flex flex-col">
-                            <a href="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Menunggu Pembayaran</a>
-                            <a href="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Daftar Transaksi</a>
+                            <Link to="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Menunggu Pembayaran</Link>
+                            <Link to="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Daftar Transaksi</Link>
                         </div>
                     )}
                 </div>
@@ -113,9 +114,9 @@ const Sidebar = () => {
                     </div>
                     {profile && (
                         <div className="text-sm pl-4 flex flex-col">
-                            <a href="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Wishlist</a>
-                            <a href="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Toko Favorite</a>
-                            <a href="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Pengaturan</a>
+                            <Link to="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Wishlist</Link>
+                            <Link to="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Toko Favorite</Link>
+                            <Link to="" className="hover:bg-gray-200 rounded-lg inline-flex p-2">Pengaturan</Link>
                         </div>
                     )}
                 </div>

@@ -9,11 +9,15 @@ import UserSettings from "../pages/user/settings/user-settings";
 import Notification from "../pages/user/settings/notification";
 import Payment from "../pages/user/settings/payment";
 import Security from "../pages/user/settings/security";
+import Product from "../components/layouts/product";
+import CheckEmail from "../pages/auth/check";
+import VerifyEmail from "../pages/auth/verify";
+import App from "../App";
 
 const routes = [
     {
         path: "/",
-        element: <Home />,
+        element: <App />,
     },
     {
         path: "/auth/login",
@@ -22,6 +26,18 @@ const routes = [
     {
         path: "/auth/register",
         element: <RegisterPage />,
+    },
+    {
+        path: "/auth/check-email",
+        element: <CheckEmail />,
+    },
+    {
+        path: "/auth/verify-email",
+        element: <VerifyEmail />,
+    },
+    {
+        path: "/home",
+        element: <Home />,
     },
     {
         path: "/user/settings",
@@ -54,6 +70,10 @@ const routes = [
     {
         path: "/user/settings/security",
         element: <Security />,
+    },
+    {
+        path: "/:nameStore/:productSlug",
+        element: <Product />,
     },
 ]
 

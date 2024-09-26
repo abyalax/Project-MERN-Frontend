@@ -1,10 +1,53 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
+    const [isLoading, setIsLoading] = useState(false)
+
+    const navigate = useNavigate();
+    const [formState, setFormState] = useState({
+        email: "",
+        password: "pass"
+    })
+
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
+        e.preventDefault();
+        setFormState({
+            ...formState,
+            [type]: e.target.value
+        })
+    }
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoading(true)
+        const response = await fetch('http://localhost:4000/api/verify/send-email', {
+            method: "post",
+            credentials: "include",
+            headers: {
+                // needed so express parser says OK to read
+                'Content-Type': 'application/json'
+            },
+            
+            body: JSON.stringify({
+                username: formState.email.split("@")[0],
+                name: formState.email.split("@")[0],
+                email: formState.email,
+                password: formState.password
+            })
+        })
+        if (response.status !== 200) {
+            return alert("Something went wrong");
+        }
+        navigate("/auth/check-email");
+        setIsLoading(false)
+    }
+
     return (
         <div className="bg-white min-w-[400px] drop-shadow-full p-10 rounded-xl xl:w-1/4 lg:w-1/3 md:w-1/2 sm:w-1/2 ">
             <div className="flex flex-col justify-center items-center my-8 ">
                 <h2 className="text-xl sm:text-2xl font-bold ">Daftar Sekarang</h2>
-                <p>Sudah Punya akun Tokopedia ? <a href="" className="text-[#00AA5B]">Masuk</a></p>
+                <p>Sudah Punya akun Tokopedia ? <Link to="/auth/login" className="text-[#00AA5B]">Masuk</Link></p>
             </div>
             <div className="flex flex-col gap-6">
                 <button className="border flex justify-center items-center gap-3 border-slate-400 w-full p-2 rounded-xl font-semibold text-lg">
@@ -22,13 +65,13 @@ const RegisterForm = () => {
                 <p className="text-center text-sm w-auto text-nowrap text-slate-500">atau</p>
                 <hr className="border w-1/3 border-slate-300" />
             </div>
-            <form className="w-full my-3">
-                <input type="text" placeholder="Nomor HP atau Email" className="border border-gray-400 w-full p-3 focus:outline-none focus:ring-1 focus:ring-green-500 rounded" />
+            <form className="w-full my-3" id="register" onSubmit={(e) => onSubmit(e)}>
+                <input type="email" name="email" onChange={(e) => onChange(e, "email")} placeholder="Masukkan Email" className="border border-gray-400 w-full p-3 focus:outline-none focus:ring-1 focus:ring-green-500 rounded" />
                 <p className="text-xs mt-0">Contoh: example@gmail.com</p>
                 <div className="flex flex-col items-end">
-                    <a href="" className="text-[#00AA5B] w-full text-end">Butuh Bantuan?</a>
+                    <Link to="" className="text-[#00AA5B] w-full text-end">Butuh Bantuan?</Link>
                 </div>
-                <button className="bg-[#00AA5B] text-white w-full p-3 rounded-xl mt-4 font-semibold text-lg">Daftar</button>
+                <button type="submit" className="bg-[#00AA5B] text-white w-full p-3 rounded-xl mt-4 font-semibold text-lg">{isLoading ? "Loading..." : "Daftar"}</button>
             </form>
         </div>
     )

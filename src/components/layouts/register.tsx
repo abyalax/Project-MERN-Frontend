@@ -1,5 +1,6 @@
 import RegisterForm from "../fragments/register";
 import image from "../../assets/img/tokopedia.png"
+import { Link } from "react-router-dom";
 
 const RegisterLayouts = () => {
     return (
@@ -15,7 +16,7 @@ const RegisterLayouts = () => {
             </div>
             <footer className="text-sm flex absolute bottom-16 gap-2">
                 <p>&copy; 2009-2024, PT Tokopedia </p>
-                <a href="" className="text-[#00AA5B] text-sm font-bold">Tokopedia Care</a>
+                <Link to={""} className="text-[#00AA5B] text-sm font-bold">Tokopedia Care</Link>
             </footer>
         </section>
     )

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import LoginForm from "../fragments/login";
 
 const LoginLayouts = () => {
@@ -7,7 +8,7 @@ const LoginLayouts = () => {
             <LoginForm />
             <footer className="text-sm flex absolute bottom-8 gap-2">
                 <p>&copy; 2009-2024, PT Tokopedia </p>
-                <a href=""> | <span className="text-green-500">Bantuan</span></a>
+                <Link to=""> | <span className="text-green-500">Bantuan</span></Link>
             </footer>
         </section>
     )

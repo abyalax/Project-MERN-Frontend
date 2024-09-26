@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Sidebar from "../fragments/sidebar"
 import { svg } from "../../assets"
 import Navbar from "../fragments/navbar";
@@ -71,7 +71,7 @@ const Userlayouts = (props: Props) => {
               <div className="overflow-x-auto whitespace-nowrap border-b-2 border-slate-200" style={{ scrollbarWidth: "none" }}>
                 <div className="grid grid-flow-col auto-cols-[minmax(110px,1fr)] gap-8 items-center font-bold text-slate-500 h-10">
                   {routes.map((route) => (
-                    <a href={route.href} className={`text-center inline-grid text-nowrap h-full ${route.active ? "text-[#00AA5B] border-b-[3px] border-[#00AA5B] font-bold" : ""}`}>{route.label}</a>
+                    <Link to={route.href} className={`text-center inline-grid text-nowrap h-full ${route.active ? "text-[#00AA5B] border-b-[3px] border-[#00AA5B] font-bold" : ""}`}>{route.label}</Link>
                   ))}
                 </div>
               </div>

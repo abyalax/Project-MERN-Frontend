@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Product } from "../../utils/type";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Carousel from "./carousel";
 import { svg, image } from "../../assets";
 
@@ -21,7 +21,6 @@ const Category = () => {
             .then(res => res.json())
             .then(json => setData(json))
         console.log(data);
-
     }, [])
 
 
@@ -140,14 +139,14 @@ const Category = () => {
                 </div>
 
                 <div className="cols-span-1">
-                    <h2 className="text-xl font-bold">Top Up & Tagihan <a href="" className="text-green-600 text-sm">Lihat Semua</a></h2>
+                    <h2 className="text-xl font-bold">Top Up & Tagihan <Link to="" className="text-green-600 text-sm">Lihat Semua</Link></h2>
                     <div className=" px-4 py-8 ">
 
                         <div className="container mx-auto p-4 border-2 border-slate-200 rounded-lg">
                             <div className="overflow-x-auto whitespace-nowrap border-b-2 border-slate-200" style={{ scrollbarWidth: "none" }}>
                                 <div className="grid grid-flow-col auto-cols-[minmax(110px,1fr)] gap-4 font-bold text-slate-500 h-10">
                                     {routes.map((route) => (
-                                        <a href={route.href} key={route.label} className={`text-center inline-grid text-nowrap h-full ${route.active ? "text-[#00AA5B] border-b-[3px] border-[#00AA5B] font-bold" : ""}`}>{route.label}</a>
+                                        <Link to={route.href} key={route.label} className={`text-center inline-grid text-nowrap h-full ${route.active ? "text-[#00AA5B] border-b-[3px] border-[#00AA5B] font-bold" : ""}`}>{route.label}</Link>
                                     ))}
                                     <button className="flex justify-start">
                                         <img src={svg.detail} className="h-5 w-5 cursor-pointer" />
@@ -183,13 +182,13 @@ const Category = () => {
                         }}>
                             <button className="flex items-center min-w-fit gap-1 border-2 border-slate-200 rounded-full py-2 px-2">
                                 <img src={svg.all} />
-                                <a href={"/"} className={`text-center inline-grid text-nowrap h-full`}>Category</a>
+                                <Link to="" className={`text-center inline-grid text-nowrap h-full`}>Category</Link>
                             </button>
 
                             {category.map((item, index) => (
                                 <button key={index} className="flex items-center min-w-fit gap-1 border-2 border-slate-200 rounded-full py-1.5 px-2">
                                     {item.icon}
-                                    <a href={item.path} className={`text-center inline-grid text-nowrap h-full`}>{item.text}</a>
+                                    <Link to={item.path} className={`text-center inline-grid text-nowrap h-full`}>{item.text}</Link>
                                 </button>
                             ))}
                         </div>
