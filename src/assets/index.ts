@@ -13,8 +13,9 @@ import footerTokopedia from "./img/footer-tokopedia.png"
 import card from "./svg/credit-card.svg"
 import cart from "./svg/cart.svg"
 import person from "./svg/person.svg"
-import arrow from "./svg/chevron-right.svg"
-import arrowC from "./svg/chevron-crsl.svg"
+import chevron from "./svg/chevron-right.svg"
+import chevronC from "./svg/chevron-crsl.svg"
+import arrowR from "./svg/arrow.svg"
 import secure from "./svg/secure.svg"
 import google from "./svg/google.svg"
 import scan from "./svg/qr-code-scan.svg"
@@ -55,7 +56,7 @@ import c2 from "./img/product/Paket Perawatan/2.jpg"
 import c3 from "./img/product/Paket Perawatan/3.png"
 
 const svg = {
-    card, cart, person, arrow, arrowC, secure, google,
+    card, cart, person, chevron, chevronC, arrowR, secure, google,
     scan, search, notification, mail, phone, detail,
     all, star, facebook, twitter, pinterest, instagram,
     googlePlay, apple, bag, square, geo, clock, truck

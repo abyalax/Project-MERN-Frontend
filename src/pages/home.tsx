@@ -4,18 +4,24 @@ import { svg } from "../assets";
 import { useEffect, useState } from "react";
 import Footer from "../components/fragments/footer";
 import Navbar from "../components/fragments/navbar";
+import { useNavigate } from "react-router-dom";
+import useUserSession from "../hooks/use-session";
 
-interface HomeProps {
-  data?: {email: string} | null
-}
-
-const Home = ( {data} : HomeProps) => {
+const Home = () => {
 
   const [product, setProduct] = useState<dataProductType[]>([])
+  const navigate = useNavigate()
+
+  const userSession = useUserSession()
 
   useEffect(() => {
+    if (!userSession.loading) {
+      if (userSession.session?.isLogin !== null && !userSession.session?.isLogin) {
+        navigate('/auth/login')
+      }
+    }
     setProduct(dataProduct)
-  }, [])
+  },[navigate, userSession.loading, userSession.session?.isLogin])
 
   const FirstFilterHandler = () => {
     setProduct(dataProduct.filter((item) => item.category === 'Work Services'))
@@ -37,7 +43,7 @@ const Home = ( {data} : HomeProps) => {
 
   return (
     <>
-      <Navbar data={data} />
+      <Navbar />
       <Category />
       <section className="px-40 py-10 border-t-8 border-slate-200">
         <div className="flex gap-3">

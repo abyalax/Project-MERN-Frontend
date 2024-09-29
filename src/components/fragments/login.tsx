@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../redux/hooks";
+import { AppDispatch } from "../../redux/store";
+import { Login, Register, VerifyEmail } from "../../redux/slice/userSlice";
+import { Login as LoginService } from "../../services/auth";
 
 const LoginForm = () => {
-
-    const navigate = useNavigate();
+    const dispatch: AppDispatch = useAppDispatch();
+    const [isLoading, setIsLoading] = useState(false)
+    const navigate = useNavigate()
     const [formState, setFormState] = useState({
         email: "",
-        password: "pass"
+        password: ""
     })
-
     const onChange = (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
         e.preventDefault();
         setFormState({
@@ -18,38 +22,45 @@ const LoginForm = () => {
     }
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:4000/api/verify/login', {
-            method: "post",
-            credentials: "include",
-            headers: {
-                // needed so express parser says OK to read
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: formState.email.split("@")[0],
-                email: formState.email,
-                password: formState.password
-            })
-        })
-        if (response.status !== 200) {
-            return alert("Something went wrong");
+        setIsLoading(true)
+        try {
+            const response = await LoginService(formState.email, formState.password);
+            console.log("Data response setelah Login : ", response);
+            if (!response.status) {
+                return alert("Something went wrong");
+            }
+            localStorage.setItem("userSession", JSON.stringify({ ...response.data.user, isLogin: true }));
+            dispatch(VerifyEmail(response.data.user.verifiedEmail));
+            dispatch(Register({ name: response.data.user.name, email: response.data.user.email }));
+            dispatch(Login({ ...response.data.user, isLogin: true }));
+            setIsLoading(false)
+            navigate("/home")
+        } catch (error) {
+            console.log(error);
+            setIsLoading(false)
+        } finally {
+            setIsLoading(false)
         }
-        navigate("/");
+
     }
+
 
     return (
         <div className="bg-white drop-shadow-full p-10 max-w-[400px]  rounded-xl xl:w-2/3 lg:w-1/3 md:w-1/2  sm:w-2/3">
             <div className="flex justify-between items-center my-8">
                 <h2 className="text-2xl font-semibold">Masuk ke Tokopedia</h2>
-               <Link to="/auth/register" className="text-[#00AA5B] text-sm font-bold text-end">Daftar</Link>
+                <Link to="/auth/register" className="text-[#00AA5B] text-sm font-bold text-end">Daftar</Link>
             </div>
             <form className="w-full" onSubmit={(e) => onSubmit(e)}>
-                <input type="email" name="email" placeholder="Masukkan Email" onChange={(e) => onChange(e, "email")} className="border border-gray-400 w-full p-3 focus:outline-none focus:ring-1 focus:ring-green-500 rounded" />
+                <input type="email" name="email" placeholder="Masukkan Email" onChange={(e) => onChange(e, "email")} className="border border-gray-400 w-full p-3 focus:outline-none focus:ring-1 focus:ring-green-500 rounded-lg" />
                 <p className="text-xs text-slate-500 font-medium mt-0">Contoh: example@gmail.com</p>
+
+                <input type="password" name="password" placeholder="Masukkan Kata Sandi" onChange={(e) => onChange(e, "password")} className="border border-gray-400 my-4 w-full p-3 focus:outline-none focus:ring-1 focus:ring-green-500 rounded-lg" />
+
                 <div className="flex flex-col items-end">
-                   <Link to="" className="text-[#00AA5B] w-full text-sm font-bold text-end">Butuh Bantuan?</Link>
+                    <Link to="" className="text-[#00AA5B] w-full text-sm font-bold text-end">Butuh Bantuan?</Link>
                 </div>
-                <button type="submit" className="bg-[#00AA5B] text-white w-full p-2 rounded-xl my-3 font-semibold text-lg">Selanjutnya</button>
+                <button type="submit" className="bg-[#00AA5B] text-white w-full p-2 rounded-xl my-3 font-semibold text-lg">{isLoading ? "Loading..." : "Selanjutnya"}</button>
             </form>
             <div className="flex justify-between items-center gap-2 my-3">
                 <hr className="border w-1/3 border-slate-300" />

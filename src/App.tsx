@@ -1,32 +1,22 @@
-import { useEffect, useState } from "react";
-import Home from "./pages/home";
+import { useEffect } from "react";
+import useUserSession from "./hooks/use-session";
+import { Link, useNavigate } from "react-router-dom";
 
 function App() {
-
-  const [user, setUser] = useState(null);
+  const userSession = useUserSession();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/verify/user', {
-      method: "get",
-      credentials: "include",
-      headers: {
-        // needed so express parser says OK to read
-        'Content-Type': 'application/json'
-      },
-    })
-      .then(response => response.json())
-      .then(result => {
-        if (result.data) {
-          setUser(result.data)
-        }
-      });
-  }, []);
-
+    if (!userSession.loading) {
+      navigate('/home')
+    }
+  }, [navigate, userSession.loading])
   return (
     <div className="App">
-      <Home data={user} />
+      <Link to={"/home"}>Ke Halaman Product</Link>
     </div>
   )
 }
 
-export default App
+
+export default App;

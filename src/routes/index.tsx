@@ -1,5 +1,4 @@
 import LoginPage from "../pages/auth/login";
-import RegisterPage from "../pages/auth/register";
 import Home from "../pages/home";
 import Address from "../pages/user/settings/address";
 import Bank from "../pages/user/settings/bank";
@@ -13,6 +12,8 @@ import Product from "../components/layouts/product";
 import CheckEmail from "../pages/auth/check";
 import VerifyEmail from "../pages/auth/verify";
 import App from "../App";
+import RegisterEmailPage from "../pages/auth/register-email";
+import RegisterPage from "../pages/auth/register";
 
 const routes = [
     {
@@ -26,6 +27,10 @@ const routes = [
     {
         path: "/auth/register",
         element: <RegisterPage />,
+    },
+    {
+        path: "/auth/send-email",
+        element: <RegisterEmailPage />,
     },
     {
         path: "/auth/check-email",

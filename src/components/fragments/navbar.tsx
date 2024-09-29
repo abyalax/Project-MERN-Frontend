@@ -1,32 +1,35 @@
 import { Link, useNavigate } from "react-router-dom";
 import { image, svg } from "../../assets";
 import { useState } from "react";
+// import { useSelector } from "react-redux";
+// import { RootState } from "../../redux/store";
+import useUserSession from "../../hooks/use-session";
 
 interface NavProps {
     classname?: string
-    data?: {
-        email: string
-    } | null
 }
 
-const Navbar = ({ classname, data }: NavProps) => {
+const Navbar = ({ classname }: NavProps) => {
 
     const [isOpen, setIsOpen] = useState(false)
     const navigate = useNavigate()
+    // const user = useSelector((state: RootState) => state.user.data)
+    // console.log({ user });
+    const userSession = useUserSession();
 
     const logout = async () => {
-        const response = await fetch('http://localhost:4000/api/verify/logout', {
+        const response = await fetch('http://localhost:4000/api/auth/logout', {
             method: "post",
             credentials: "include",
             headers: {
-                // needed so express parser says OK to read
                 'Content-Type': 'application/json'
             },
         })
         const result = await response.json();
-        if (result.message === 'Logged out successfully') {
+        if (result.status) {
             alert('Logged out successfully')
-            data = null
+            localStorage.removeItem('userSession')
+            navigate('/auth/login')
         } else {
             alert('Something went wrong')
         }
@@ -82,7 +85,7 @@ const Navbar = ({ classname, data }: NavProps) => {
                             </div>
                         </div>
 
-                        {data ? (
+                        {userSession.session?.isLogin ? (
                             <div className="col-span-2 flex gap-7 justify-center">
                                 <button className="bg-transparent hover:bg-slate-200 rounded-lg py-2 px-3 flex gap-2 justify-center items-center">
                                     <img src={image.store} className="h-8 w-8 rounded-full" />
@@ -91,7 +94,7 @@ const Navbar = ({ classname, data }: NavProps) => {
 
                                 <button onClick={() => setIsOpen(!isOpen)} className="bg-transparent relative hover:bg-slate-200 rounded-lg py-2 px-3 flex gap-2 justify-center items-center">
                                     <img src={image.profile} className="h-8 w-8 rounded-full" />
-                                    {data.email.split("@")[0]}
+                                    {userSession.session.name}
                                 </button>
 
                                 {isOpen && (
@@ -104,8 +107,8 @@ const Navbar = ({ classname, data }: NavProps) => {
                                     <Link to={"/auth/login"}>Masuk</Link>
                                 </button>
 
-                                <button onClick={() => navigate("/auth/register")} className="bg-green-600 text-white  rounded-lg h-[80%] px-5 font-semibold text-sm flex gap-2 justify-center items-center">
-                                    <Link to={"/auth/register"}>Daftar</Link>
+                                <button onClick={() => navigate("/auth/send-email")} className="bg-green-600 text-white  rounded-lg h-[80%] px-5 font-semibold text-sm flex gap-2 justify-center items-center">
+                                    <Link to={"/auth/send-email"}>Daftar</Link>
                                 </button>
                             </div>
                         )}

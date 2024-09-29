@@ -1,21 +1,10 @@
 import { useState } from "react";
 import { image, svg } from "../../assets";
-import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
-  const { t, i18n } = useTranslation();
   const [language, setLanguage] = useState("id");
 
-  const changeLanguage = (lang: string) => {
-    i18n.changeLanguage(lang);
-    i18n.changeLanguage('en', (err, t) => {
-      console.log('loaded', t('key'));
-      if (err) return console.log('something went wrong loading', err);
-      t('key'); // -> same as i18next.t
-    });
-    setLanguage(lang);
-  };
 
   return (
     <footer>
@@ -23,7 +12,7 @@ const Footer = () => {
         <div className="col-span-2 flex w-full">
           <div className=" h-full w-1/2  flex flex-col gap-2 text-gray-600">
             <h2 className="font-bold text-lg mb-2 text-black">Tokopedia</h2>
-            <Link to=""className="text-sm">{t('Tentang Tokopedia')}</Link>
+            <Link to=""className="text-sm">Tentang Tokopedia</Link>
             <Link to=""className="text-sm">Hak Kekayaan Intelektual</Link>
             <Link to=""className="text-sm">Karir</Link>
             <Link to=""className="text-sm">Blog</Link>
@@ -104,8 +93,8 @@ const Footer = () => {
           </div>
           <p className="text-sm font-semibold text-slate-500 text-center my-8">&copy; 2009-2024, PT. Tokopedia.</p>
           <div className="mx-auto bg-slate-100 max-w-fit font-bold text-sm text-white flex gap-2 justify-center items-center rounded-md py-1 px-2">
-            <button onClick={() => changeLanguage('id')} className={language === 'id' ? `bg-green-600 px-3 py-0.5 rounded-md` : `text-slate-500`}>Indonesia</button>
-            <button onClick={() => changeLanguage('en')} className={language === 'en' ? `bg-green-600 px-3 py-0.5 rounded-md` : `text-slate-500`}>English</button>
+            <button onClick={() => setLanguage('id')} className={language === 'id' ? `bg-green-600 px-3 py-0.5 rounded-md` : `text-slate-500`}>Indonesia</button>
+            <button onClick={() => setLanguage('en')} className={language === 'en' ? `bg-green-600 px-3 py-0.5 rounded-md` : `text-slate-500`}>English</button>
           </div>
         </div>
       </div>

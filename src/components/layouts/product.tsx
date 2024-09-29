@@ -11,25 +11,23 @@ const Product = () => {
     const reverseFormat = (item: string) => {
         return item.replace(/-/g, ' ')
     }
-    const fetchProduct = async () => {
-        if (productSlug && nameStore) {
-            console.log({ productSlug }, { nameStore });
-
-            const prod = reverseFormat(productSlug)
-            const store = reverseFormat(nameStore)
-
-            console.log({ prod }, { store });
-
-            const result = dataProduct.find((product) => product.storeName.toLowerCase() === store && product.name.toLowerCase() === prod)
-            setProduct(result)
-        }
-    }
 
     useEffect(() => {
+        const fetchProduct = async () => {
+            if (productSlug && nameStore) {
+                console.log({ productSlug }, { nameStore });
+
+                const prod = reverseFormat(productSlug)
+                const store = reverseFormat(nameStore)
+
+                console.log({ prod }, { store });
+
+                const result = dataProduct.find((product) => product.storeName.toLowerCase() === store && product.name.toLowerCase() === prod)
+                setProduct(result)
+            }
+        }
         fetchProduct()
-        console.log("Hasil Fetch: ", { product });
-        return;
-    }, [])
+    }, [nameStore, productSlug])
 
     return (
         <>
@@ -132,7 +130,7 @@ const Product = () => {
 
                         <hr className="my-4" />
 
-                        <div className="flex flex-col"> 
+                        <div className="flex flex-col">
                             <p className="font-bold text-black text-lg mb-2">Pengiriman</p>
                             <div className="flex items-center gap-2">
                                 <img src={svg.geo} className="w-4 h-4" />
