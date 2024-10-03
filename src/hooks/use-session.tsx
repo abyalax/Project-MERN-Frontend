@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Address, Cart, Stores } from '../types';
 import { useDispatch } from 'react-redux';
-import { Login, Register, VerifyEmail } from "../redux/slice/userSlice"
+import { Login, RefreshData } from "../redux/slice/userSlice"
 import { useNavigate } from 'react-router-dom';
 
 type UserSession = {
@@ -19,7 +19,7 @@ type UserSession = {
 
 function useUserSession() {
   const [session, setSession] = useState<UserSession | null>(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,8 +31,8 @@ function useUserSession() {
           credentials: 'include',
         });
         const result = await response.json();
-        console.log('Fetched user data:', result);
-
+        console.log('Fetched user data from hooks:', result);
+  
         if (result.status === true) {
           const userSessionData = {
             isLogin: true,
@@ -45,21 +45,20 @@ function useUserSession() {
             address: result.data.address,
             carts: result.data.carts,
             stores: result.data.stores,
-          }
-
+          };
+  
           localStorage.setItem('userSession', JSON.stringify(userSessionData));
           setSession(userSessionData);
-          
-          dispatch(Register({ name: result.data.name, email: result.data.email }));
-          dispatch(Login({ ...result.data, isLogin: true }));
-          dispatch(VerifyEmail(result.data.verifiedEmail));
-
+          console.log('Session after set:', userSessionData);
+  
+          dispatch(Login(true));
+          dispatch(RefreshData(result.data));
+  
           navigate('/home');
         } else {
           localStorage.removeItem('userSession');
           setSession(null);
-          
-          dispatch(Login({
+          dispatch(RefreshData({
             name: '', email: '', verifiedEmail: false, isLogin: false,
             phone: '', profileImage: '', role: 'user', address: [], carts: [], stores: []
           }));
@@ -68,9 +67,7 @@ function useUserSession() {
         console.error('Error fetching user data:', error);
         localStorage.removeItem('userSession');
         setSession(null);
-
-        // Reset Redux store
-        dispatch(Login({
+        dispatch(RefreshData({
           name: '', email: '', verifiedEmail: false, isLogin: false,
           phone: '', profileImage: '', role: 'user', address: [], carts: [], stores: []
         }));
@@ -78,26 +75,27 @@ function useUserSession() {
         setLoading(false);
       }
     };
-
+  
     const userData = localStorage.getItem('userSession');
+    console.log('userData from localStorage:', userData);
     if (userData) {
       try {
         const parsedData = JSON.parse(userData);
+        console.log('Parsed session:', parsedData);
         setSession(parsedData);
-        console.log('Session from localStorage:', parsedData);
+        dispatch(RefreshData(parsedData));
       } catch (error) {
         console.error('Failed to parse userData:', error);
       }
       setLoading(false);
     } else {
-      fetchUserData(); 
+      fetchUserData();
     }
   }, [dispatch, navigate]);
-
+  
   if (loading) {
-    return { session: null, loading: true }; 
+    return { session: null, loading: true };
   }
-
   return { session, loading: false };
 }
 

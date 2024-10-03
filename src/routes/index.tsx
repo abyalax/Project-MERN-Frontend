@@ -14,6 +14,10 @@ import VerifyEmail from "../pages/auth/verify";
 import App from "../App";
 import RegisterEmailPage from "../pages/auth/register-email";
 import RegisterPage from "../pages/auth/register";
+import ProtectedRoute from "../pages/auth/protected";
+import CreateStore from "../pages/store/create-store"
+import SuccessCreateStore from "../pages/store/success-create";
+import DashboardStore from "../pages/store/dashboard";
 
 const routes = [
     {
@@ -46,39 +50,95 @@ const routes = [
     },
     {
         path: "/user/settings",
-        element: <UserSettings />,
+        element: (
+            <ProtectedRoute>
+                <UserSettings />
+            </ProtectedRoute>
+        )
     },
     {
         path: "/user/settings/address",
-        element: <Address />,
+        element: (
+            <ProtectedRoute>
+                <Address />
+            </ProtectedRoute>
+        ),
     },
     {
         path: "/user/settings/bank",
-        element: <Bank />,
+        element: (
+            <ProtectedRoute>
+                <Bank />,
+            </ProtectedRoute>
+        )
     },
     {
         path: "/user/settings/google",
-        element: <GoogleAuth />,
+        element: (
+            <ProtectedRoute>
+                <GoogleAuth />,
+            </ProtectedRoute>
+        ),
     },
     {
         path: "/user/settings/mode",
-        element: <ModeView />,
+        element: (
+            <ProtectedRoute>
+                <ModeView />
+            </ProtectedRoute>
+        )
     },
     {
         path: "/user/settings/notification",
-        element: <Notification />,
+        element: (
+            <ProtectedRoute>
+                <Notification />
+            </ProtectedRoute>
+        )
     },
     {
         path: "/user/settings/payment",
-        element: <Payment />,
+        element: (
+            <ProtectedRoute>
+                <Payment />
+            </ProtectedRoute>
+        )
     },
     {
         path: "/user/settings/security",
-        element: <Security />,
+        element: (
+            <ProtectedRoute>
+                <Security />
+            </ProtectedRoute>
+        )
+    },
+    {
+        path: "/store/create-store",
+        element: (
+            <ProtectedRoute>
+                <CreateStore />
+            </ProtectedRoute>
+        )
+    },
+    {
+        path: "/store/success-create",
+        element: (
+            <ProtectedRoute>
+                <SuccessCreateStore />
+            </ProtectedRoute>
+        )
+    },
+    {
+        path: "/store/dashboard",
+        element: (
+            <ProtectedRoute>
+                <DashboardStore />
+            </ProtectedRoute>
+        )
     },
     {
         path: "/:nameStore/:productSlug",
-        element: <Product />,
+        element: <Product />
     },
 ]
 

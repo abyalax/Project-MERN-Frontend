@@ -1,4 +1,5 @@
-import { Cart } from './../../types/index';
+import { AddressResponse } from './../../types/response';
+import { Cart, } from './../../types/index';
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { User } from "../../types";
@@ -21,7 +22,6 @@ const initialState: UserState = {
         stores: []
     }
 };
-
 const UserSlice = createSlice({
     name: "User",
     initialState,
@@ -29,13 +29,32 @@ const UserSlice = createSlice({
         VerifyEmail: (state, action: PayloadAction<boolean>) => {
             state.data.verifiedEmail = action.payload
         },
-        Register: (state, action: PayloadAction<{name: string, email: string}>) => {
+        Register: (state, action: PayloadAction<{ name: string, email: string }>) => {
             state.data.name = action.payload.name
             state.data.email = action.payload.email
         },
-        Login: (state, action: PayloadAction<User>) => {
-            state.data.isLogin = true
+        Login: (state, action: PayloadAction<boolean>) => {
+            state.data.isLogin = action.payload
+        },
+        TrackAddress: (state, action: PayloadAction<AddressResponse>) => {
+            const data = {
+                recipient: state.data.name,
+                phone: state.data.phone,
+                isMain: false,
+                state: action.payload.state,
+                regency: action.payload.county,
+                municipality: action.payload.municipality,
+                village: action.payload.village,
+                kodePost: action.payload.postcode
+            }
+            state.data.address.push(data)
+        },
+        RefreshData: (state, action: PayloadAction<User>) => {
             state.data = action.payload
+            state.data.isLogin = true
+        },
+        CreateStore: (state, action: PayloadAction<string>) => {
+            state.data.stores.push(action.payload)
         },
         AddToCart: (state, action: PayloadAction<Cart>) => {
             const itemCart = state.data.carts.find(item => item.productId === action.payload.productId)
@@ -48,7 +67,7 @@ const UserSlice = createSlice({
     }
 });
 
-export const { VerifyEmail, Login, Register, AddToCart } = UserSlice.actions;
+export const { VerifyEmail, Login, Register, AddToCart, RefreshData, TrackAddress, CreateStore } = UserSlice.actions;
 export default UserSlice.reducer;
 
 

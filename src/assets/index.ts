@@ -1,14 +1,20 @@
 import gopay from "./img/gopay.png"
 import money from "./img/money.png"
-import bgAuth from "./img/image.png"
+import bgAuth from "./tokopedia/auth.png"
 import profile from "./img/profile.jpg"
-import tokopedia from "./img/tokopedia.png"
+import tokopedia from "./tokopedia/tokopedia.png"
 import store from "./img/store.png"
 import bill from "./img/bill.png"
 import invoice from "./img/invoice.png"
 import pci from "./img/pci-dss.png"
 import ISO from "./img/ISOIEC-27001.png"
-import footerTokopedia from "./img/footer-tokopedia.png"
+import footerTokopedia from "./tokopedia/footer-tokopedia.png"
+import cartImage from "./tokopedia/cartImg.png"
+import notifImg from "./tokopedia/notifImg.png"
+import creStore from "./tokopedia/create-store.png"
+import geoTokopedia from "./tokopedia/geo-tokopedia.png"
+import successTokopedia from "./tokopedia/success-tokopedia.png"
+import haloStore from "./tokopedia/halo-store.png"
 
 import card from "./svg/credit-card.svg"
 import cart from "./svg/cart.svg"
@@ -37,6 +43,12 @@ import square from "./svg/square.svg"
 import geo from "./svg/geo.svg"
 import clock from "./svg/clock.svg"
 import truck from "./svg/truck.svg"
+import chat from "./svg/chat.svg"
+import love from "./svg/love.svg"
+import share from "./svg/share.svg"
+import thumb from "./svg/thumb.svg"
+import settings from "./svg/settings.svg"
+import check from "./svg/check-white.svg"
 
 import a from "./banners/1.png"
 import b from "./banners/2.png"
@@ -59,12 +71,14 @@ const svg = {
     card, cart, person, chevron, chevronC, arrowR, secure, google,
     scan, search, notification, mail, phone, detail,
     all, star, facebook, twitter, pinterest, instagram,
-    googlePlay, apple, bag, square, geo, clock, truck
+    googlePlay, apple, bag, square, geo, clock, truck, chat,
+    love, share, thumb, settings, check
 }
 
 const image = {
     gopay, money, bgAuth, profile, tokopedia, store, bill, 
-    invoice, pci, ISO, footerTokopedia
+    invoice, pci, ISO, footerTokopedia, cartImage, notifImg,
+    creStore, geoTokopedia, successTokopedia, haloStore
 }
 
 const banners = [a, b, c, d]

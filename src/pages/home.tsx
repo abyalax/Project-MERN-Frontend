@@ -4,24 +4,16 @@ import { svg } from "../assets";
 import { useEffect, useState } from "react";
 import Footer from "../components/fragments/footer";
 import Navbar from "../components/fragments/navbar";
-import { useNavigate } from "react-router-dom";
-import useUserSession from "../hooks/use-session";
 
 const Home = () => {
 
   const [product, setProduct] = useState<dataProductType[]>([])
-  const navigate = useNavigate()
 
-  const userSession = useUserSession()
 
   useEffect(() => {
-    if (!userSession.loading) {
-      if (userSession.session?.isLogin !== null && !userSession.session?.isLogin) {
-        navigate('/auth/login')
-      }
-    }
     setProduct(dataProduct)
-  },[navigate, userSession.loading, userSession.session?.isLogin])
+    return () => setProduct([])
+  }, [])
 
   const FirstFilterHandler = () => {
     setProduct(dataProduct.filter((item) => item.category === 'Work Services'))
@@ -39,7 +31,6 @@ const Home = () => {
   const formatURL = (item: string) => {
     return item.trim().replace(/\s+/g, '-').toLowerCase()
   }
-
 
   return (
     <>

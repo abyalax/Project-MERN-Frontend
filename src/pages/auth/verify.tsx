@@ -18,7 +18,6 @@ function VerifyEmail() {
         const attemptToVerify = async () => {
             const code = searchParams.get("code");
             const email = searchParams.get("email");
-            console.log({ code }, { email });
 
             if (!code || !email) {
                 return setVerificationState(VerificationState.invalid)

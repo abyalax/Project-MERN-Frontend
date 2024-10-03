@@ -8,7 +8,7 @@ export interface User {
     role: string
     address: Address[]
     carts: Cart[]
-    stores: Stores[]
+    stores: string[]
 }
 
 export interface Cart {
@@ -20,15 +20,30 @@ export interface Cart {
 
 export interface Address {
     recipient: string
-    addressLine: string
     phone: string
     isMain: boolean
+    state: string
+    regency: string
+    municipality: string
+    village: string
+    kodePost: string
+}
+
+export interface AddressStore {
+    provincy: string
+    regency: string
+    municipality: string
+    village: string
+    kodePost: string
 }
 
 export interface Stores {
     storeId: string
-    name: string
-    address: string
+    store: string
+    address: {
+        city: string
+        kodePost: number
+    }
     products: Product[]
 }
 

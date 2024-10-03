@@ -1,6 +1,6 @@
-import image from "../../assets/img/tokopedia.png"
 import { Link } from "react-router-dom";
 import RegisterForm from "../fragments/register";
+import { image } from "../../assets";
 
 const RegisterLayouts = () => {
     return (
@@ -8,7 +8,7 @@ const RegisterLayouts = () => {
             <h2 className=" absolute top-10 text-4xl text-green-500 text-center font-semibold">tokopedia</h2>
             <div className="flex justify-evenly">
                 <div>
-                    <img src={image} width={400} height={400}/>
+                    <img src={image.tokopedia} width={400} height={400}/>
                     <h2 className="text-center font-bold text-xl">Jual Beli Mudah Hanya di Tokopedia</h2>
                     <p className="text-center font-light">Gabung dan rasakan kemudahan bertransaksi di Tokopedia</p>
                 </div>

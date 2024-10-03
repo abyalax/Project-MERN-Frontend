@@ -40,7 +40,8 @@ const RegisterForm = () => {
                     setVerificationState(VerificationState.invalid)
                 }
             } catch (error) {
-                console.log(error);
+                console.error(error)
+                setIsLoading(false)
             }
         }
         verifyHandler()
@@ -58,9 +59,7 @@ const RegisterForm = () => {
         setIsLoading(true)
         try {
             const response = await RegisterService(formState.name, formState.email, formState.password)
-            console.log(response);
             if (response.status === true) {
-                console.log("Data Response setelah Register : ", response);
                 dispatch(Register(response.data.user))
                 dispatch(Login({...response.data.user, isLogin: true}))
                 dispatch(VerifyEmail(response.data.user.verifiedEmail))
@@ -68,7 +67,7 @@ const RegisterForm = () => {
                 setIsLoading(false)
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
             setIsLoading(false)
         } finally {
             setIsLoading(false)

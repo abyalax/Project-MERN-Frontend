@@ -25,7 +25,6 @@ const LoginForm = () => {
         setIsLoading(true)
         try {
             const response = await LoginService(formState.email, formState.password);
-            console.log("Data response setelah Login : ", response);
             if (!response.status) {
                 return alert("Something went wrong");
             }
@@ -36,14 +35,12 @@ const LoginForm = () => {
             setIsLoading(false)
             navigate("/home")
         } catch (error) {
-            console.log(error);
+            console.error(error);
             setIsLoading(false)
         } finally {
             setIsLoading(false)
         }
-
     }
-
 
     return (
         <div className="bg-white drop-shadow-full p-10 max-w-[400px]  rounded-xl xl:w-2/3 lg:w-1/3 md:w-1/2  sm:w-2/3">
