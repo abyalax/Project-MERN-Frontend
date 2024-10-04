@@ -15,6 +15,7 @@ import creStore from "./tokopedia/create-store.png"
 import geoTokopedia from "./tokopedia/geo-tokopedia.png"
 import successTokopedia from "./tokopedia/success-tokopedia.png"
 import haloStore from "./tokopedia/halo-store.png"
+import book from "./tokopedia/book-tokopedia.png"
 
 import card from "./svg/credit-card.svg"
 import cart from "./svg/cart.svg"
@@ -49,6 +50,8 @@ import share from "./svg/share.svg"
 import thumb from "./svg/thumb.svg"
 import settings from "./svg/settings.svg"
 import check from "./svg/check-white.svg"
+import cookie from "./svg/cookie.svg"
+import note from "./svg/note.svg"
 
 import a from "./banners/1.png"
 import b from "./banners/2.png"
@@ -72,13 +75,14 @@ const svg = {
     scan, search, notification, mail, phone, detail,
     all, star, facebook, twitter, pinterest, instagram,
     googlePlay, apple, bag, square, geo, clock, truck, chat,
-    love, share, thumb, settings, check
+    love, share, thumb, settings, check, cookie, note
 }
 
 const image = {
     gopay, money, bgAuth, profile, tokopedia, store, bill, 
     invoice, pci, ISO, footerTokopedia, cartImage, notifImg,
-    creStore, geoTokopedia, successTokopedia, haloStore
+    creStore, geoTokopedia, successTokopedia, haloStore,
+    book
 }
 
 const banners = [a, b, c, d]

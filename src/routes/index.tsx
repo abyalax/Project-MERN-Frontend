@@ -18,6 +18,7 @@ import ProtectedRoute from "../pages/auth/protected";
 import CreateStore from "../pages/store/create-store"
 import SuccessCreateStore from "../pages/store/success-create";
 import DashboardStore from "../pages/store/dashboard";
+import AddProduct from "../pages/store/products/add-product";
 
 const routes = [
     {
@@ -129,10 +130,18 @@ const routes = [
         )
     },
     {
-        path: "/store/dashboard",
+        path: "/store/home",
         element: (
             <ProtectedRoute>
                 <DashboardStore />
+            </ProtectedRoute>
+        )
+    },
+    {
+        path: "/store/:nameStore/add-product",
+        element: (
+            <ProtectedRoute>
+                <AddProduct />
             </ProtectedRoute>
         )
     },

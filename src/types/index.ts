@@ -38,12 +38,9 @@ export interface AddressStore {
 }
 
 export interface Stores {
-    storeId: string
+    userId: string
     store: string
-    address: {
-        city: string
-        kodePost: number
-    }
+    address: AddressStore
     products: Product[]
 }
 

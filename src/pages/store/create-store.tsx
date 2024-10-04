@@ -14,14 +14,10 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../index.css"
 
 const CreateStore = () => {
-  const phone = useSelector((state: RootState) => state.user.data.phone);
-  const name = useSelector((state: RootState) => state.user.data.name);
 
-  const provincy = useSelector((state: RootState) => state.user.data.address?.[0]?.state || '');
-  const regency = useSelector((state: RootState) => state.user.data.address?.[0]?.regency || '');
-  const municipality = useSelector((state: RootState) => state.user.data.address?.[0]?.municipality || '');
-  const village = useSelector((state: RootState) => state.user.data.address?.[0]?.village || '');
-  const kodePost = useSelector((state: RootState) => state.user.data.address?.[0]?.kodePost || '');
+  const dataUser = useSelector((state: RootState) => state.user.data)
+  const { state, regency, municipality, village, kodePost } = dataUser.address[0]
+  const { phone, name } = dataUser
 
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +32,7 @@ const CreateStore = () => {
     store: "",
     domain: "",
     address: {
-      provincy: "",
+      provincy: state,
       regency: "",
       municipality: "",
       village: "",
@@ -50,14 +46,14 @@ const CreateStore = () => {
       store: "",
       domain: "",
       address: {
-        provincy,
+        provincy: state,
         regency,
         municipality,
         village,
         kodePost,
       },
     });
-  }, [phone, provincy, regency, municipality, village, kodePost]);
+  }, [phone, state, regency, municipality, village, kodePost]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
     e.preventDefault();
