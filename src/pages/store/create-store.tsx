@@ -96,7 +96,6 @@ const CreateStore = () => {
         dispatch(CreateStoreAction(response.data._id));
         console.log("Store created successfully");
         navigate("/store/success-create");
-        // navigate("/store/success-create");
         setIsLoading(false);
       } else {
         alert("Failed to create store");

@@ -31,7 +31,7 @@ const LoginForm = () => {
             localStorage.setItem("userSession", JSON.stringify({ ...response.data.user, isLogin: true }));
             dispatch(VerifyEmail(response.data.user.verifiedEmail));
             dispatch(Register({ name: response.data.user.name, email: response.data.user.email }));
-            dispatch(Login({ ...response.data.user, isLogin: true }));
+            dispatch(Login(true));
             setIsLoading(false)
             navigate("/home")
         } catch (error) {

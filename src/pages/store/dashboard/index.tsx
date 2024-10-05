@@ -60,23 +60,21 @@ const DashboardStore = () => {
                             <h2 className="text-xl text-black my-0.5 font-semibold">Selamat Datang di Tokopedia</h2>
                             <p className="text-slate-700 font-semibold mt-1 mb-3 text-sm">Ikuti rekomendasi dan misi untuk raih penjualan pertama.</p>
                             <div className="flex gap-4">
-                                <div className="w-1/2">
+                                <div className="w-1/2 h-full">
                                     <div className="bg-white p-4 rounded-lg">
                                         <p>Produk Dilihat</p>
-                                        <h2>0</h2>
-                                        {store?.store && (
-                                            <Link to={`/store/${store.store}/add-product`}>Tambah Product</Link>
+                                        {store?.store ? (
+                                            <Link to={`/store/${store.store}/add-product`} className="link">Tambah Product</Link>
+                                        ) : (
+                                            <h2>0</h2>
                                         )}
                                         <p>0% dari 30 hari terakhir</p>
                                     </div>
                                 </div>
-                                <div className="w-1/2">
-                                    <div className="bg-blue-400 p-4 rounded-lg">
-                                        <p>Dalam Keranjang</p>
-                                        <h2>0</h2>
-                                        <p>0% dari 30 hari terakhir</p>
-
-                                    </div>
+                                <div className="w-1/2 h-full bg-white rounded-lg p-4">
+                                    <p>Dalam Keranjang</p>
+                                    <h2>0</h2>
+                                    <p>0% dari 30 hari terakhir</p>
                                 </div>
                             </div>
                         </div>

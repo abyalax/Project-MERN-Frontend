@@ -11,7 +11,7 @@ const SuccessCreateStore = () => {
     
     useEffect(() => {
         setTimeout(() => {
-            navigate('/store/dashboard')
+            navigate('/store/home')
         }, 3000)
         return () => {};
     }, [navigate])

@@ -52,6 +52,8 @@ import settings from "./svg/settings.svg"
 import check from "./svg/check-white.svg"
 import cookie from "./svg/cookie.svg"
 import note from "./svg/note.svg"
+import addImage from "./svg/add-image.svg"
+import addVideo from "./svg/add-video.svg"
 
 import a from "./banners/1.png"
 import b from "./banners/2.png"
@@ -72,14 +74,14 @@ import c3 from "./img/product/Paket Perawatan/3.png"
 
 const svg = {
     card, cart, person, chevron, chevronC, arrowR, secure, google,
-    scan, search, notification, mail, phone, detail,
-    all, star, facebook, twitter, pinterest, instagram,
-    googlePlay, apple, bag, square, geo, clock, truck, chat,
-    love, share, thumb, settings, check, cookie, note
+    scan, search, notification, mail, phone, detail, all, star,
+    facebook, twitter, pinterest, instagram, googlePlay, apple,
+    bag, square, geo, clock, truck, chat, love, share, thumb,
+    settings, check, cookie, note, addImage, addVideo
 }
 
 const image = {
-    gopay, money, bgAuth, profile, tokopedia, store, bill, 
+    gopay, money, bgAuth, profile, tokopedia, store, bill,
     invoice, pci, ISO, footerTokopedia, cartImage, notifImg,
     creStore, geoTokopedia, successTokopedia, haloStore,
     book

@@ -61,7 +61,7 @@ const RegisterForm = () => {
             const response = await RegisterService(formState.name, formState.email, formState.password)
             if (response.status === true) {
                 dispatch(Register(response.data.user))
-                dispatch(Login({...response.data.user, isLogin: true}))
+                dispatch(Login(true))
                 dispatch(VerifyEmail(response.data.user.verifiedEmail))
                 navigate("/auth/login");
                 setIsLoading(false)
