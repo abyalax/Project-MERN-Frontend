@@ -5,6 +5,7 @@ import "./index.css";
 import routes from "./routes";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import { ToasterProvider } from "./context/toaster-context";
 
 const router = createBrowserRouter(routes);
 const rootElement = document.getElementById("root");
@@ -14,7 +15,9 @@ if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <Provider store={store}>
-        <RouterProvider router={router} />
+        <ToasterProvider>
+          <RouterProvider router={router} />
+        </ToasterProvider>
       </Provider>
     </React.StrictMode>
   );

@@ -87,14 +87,10 @@ const CreateStore = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log({ formState });
     try {
       const response = await CreateStoreService(formState);
       if (response.status === true) {
-        console.log("Response :",response);
-        console.log("Id Store :",response.data._id);
         dispatch(CreateStoreAction(response.data._id));
-        console.log("Store created successfully");
         navigate("/store/success-create");
         setIsLoading(false);
       } else {
@@ -117,7 +113,6 @@ const CreateStore = () => {
           credentials: "include",
         });
         const result = await response.json();
-        console.log("Fetched user data:", result.data);
         dispatch(RefreshData(result.data));
       } catch (error) {
         console.error(error);
@@ -139,7 +134,6 @@ const CreateStore = () => {
         address.kodePost !== "") filledFields += 1;
     }
     setProgress(filledFields);
-    console.log({ formState, progress });
   }, [formState, phone, progress]);
 
   useEffect(() => {
@@ -149,10 +143,8 @@ const CreateStore = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
           getAddressFromCoordinates(latitude, longitude).then((address: AddressResponse) => {
             if (address) {
-              console.log("Address:", address);
               dispatch(TrackAddress(address))
             } else {
               console.error("Data alamat tidak ditemukan.");

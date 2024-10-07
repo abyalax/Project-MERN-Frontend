@@ -46,7 +46,6 @@ export const GetStores = async () => {
 }
 
 export const GetStoresByID = async (storeId: string) => {
-    console.log("ID before fetch", storeId);    
     const response = await fetch(`http://localhost:4000/api/user/stores/${storeId}`, {
         method: "get",
         credentials: "include",

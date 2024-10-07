@@ -44,29 +44,31 @@ export interface Stores {
     products: Product[]
 }
 
+export enum Condition {
+    NEW = 'new',
+    USED = 'used',
+}
 export interface Product {
-    id: string
     name: string
     description: string
     price: number
     category: string
-    quantity: number
-    sold: number
-    rate: number
-    discount: number
-    condition: string
+    etalase: string
+    stock: number
+    sold?: number
+    rate?: number
+    discount?: number
+    condition: Condition
     minOrder: number
-    image: string
-    createdAt: Date
-    updatedAt: Date
-    reviews: Review[] 
+    image: { secure_url: string }[]
+    reviews?: Review[]
 }
 
 export interface Review {
     name: string
     comment: string
     like: number
-    createdAt : Date
+    createdAt: Date
     sellerReply: {
         text: string
         createdAt: Date

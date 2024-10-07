@@ -24,11 +24,9 @@ const DashboardStore = () => {
                 const response = await GetStoresByID(userId)
                 if (response.status === true) {
                     setStore(response.data)
-                    console.log(response.data)
                 }
-                console.log(response)
             } else {
-                console.log("userId not found");
+                console.error("userId not found");
             }
         } catch (error) {
             console.log(error);
@@ -38,8 +36,7 @@ const DashboardStore = () => {
     useEffect(() => {
         getDetail(userId)
         const timer = setTimeout(() => {
-            console.log("Modal triggered");
-            // setShowModal(true);
+            setShowModal(true);
         }, 2000);
 
         return () => clearTimeout(timer);
@@ -64,7 +61,7 @@ const DashboardStore = () => {
                                     <div className="bg-white p-4 rounded-lg">
                                         <p>Produk Dilihat</p>
                                         {store?.store ? (
-                                            <Link to={`/store/${store.store}/add-product`} className="link">Tambah Product</Link>
+                                            <Link to={`/store/${store.store.replace(' ', '-')}/add-product`} className="link">Tambah Product</Link>
                                         ) : (
                                             <h2>0</h2>
                                         )}

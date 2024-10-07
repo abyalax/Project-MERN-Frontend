@@ -78,12 +78,13 @@ const DragAndDropVideo = () => {
                     className='hidden'
                     ref={fileInputRef}
                     onChange={onFileSelect}
+                    disabled={true}
                 />
             </div>
             <div className='h-72 w-full grid grid-cols-5 grid-rows-2 gap-x-2.5 gap-y-2' >
-                <div className={`${isHover ? 'border-green-500' : 'border-slate-300'} border-2  border-dashed flex flex-col justify-center items-center rounded-lg`}>
+                <div className={`${isHover ? 'border-green-500' : 'border-slate-300'} border-2  border-dashed flex flex-col justify-center text-center text-sm text-slate-500 items-center rounded-lg`}>
                     <img src={svg.addVideo} className='w-8 h-8' />
-                    Video
+                    {`Disabled, Next time it \n will be released`}
                 </div>
             </div>
         </div>
