@@ -5,10 +5,10 @@ import { useContext, useState } from "react";
 import DragAndDropVideo from "../../../components/fragments/drag-drop-video";
 import DragAndDrop from "../../../components/fragments/drag-drop";
 import { CreateProduct } from "../../../services/products";
-import { Condition } from "../../../types/index"
 import { Image } from "../../../components/fragments/drag-drop";
 import { uploadImages } from "../../../services/cloudinary";
 import { ToasterContext } from "../../../context/toaster-context";
+import { Condition } from "../../../types/products";
 
 
 const AddProduct = () => {
@@ -69,7 +69,8 @@ const AddProduct = () => {
     
             // Set produk yang sudah memiliki image hasil upload
             const updatedProduct = { ...product, image: upImage };
-    
+            console.log("Updated Product: ", updatedProduct);
+            
             // Lakukan upload produk dengan product yang sudah ter-update
             const response = await CreateProduct(updatedProduct);
     

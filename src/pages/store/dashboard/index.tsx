@@ -4,15 +4,19 @@ import { image, svg } from "../../../assets";
 import { GetStoresByID } from "../../../services/stores";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { Stores } from "../../../types";
 import NavbarSeller from "../../../components/fragments/navbar-seller";
 import SidebarSeller from "../../../components/fragments/sidebar-seller";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Stores } from "../../../types/stores";
 
 const DashboardStore = () => {
+    const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const userId = useSelector((state: RootState) => state.user.data.stores[0]);
     console.log("userId from state store", userId);
+    if (userId === undefined) {
+        navigate('/store/create-store')
+    }
 
     const [store, setStore] = useState<Stores>();
     console.log("store from state store", store?.store);

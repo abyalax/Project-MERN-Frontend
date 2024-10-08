@@ -1,4 +1,4 @@
-import { Condition } from "../../types";
+import { Condition } from "../../types/products"
 
 interface Params {
     nameStore: string
@@ -35,5 +35,23 @@ export const CreateProduct = async (form: Params) => {
     })
     const data = await response.json();
     console.log("Response after service Create Product: ",data);
+    return data
+}
+
+export const GetProducts = async () => {
+    const response = await fetch('http://localhost:4000/api/products', {
+        method: "get",
+        credentials: "include",
+    })
+    const data = await response.json();
+    return data
+}
+
+export const GetProductsByStore = async () => {
+    const response = await fetch('http://localhost:4000/api/products', {
+        method: "get",
+        credentials: "include",
+    })
+    const data = await response.json();
     return data
 }

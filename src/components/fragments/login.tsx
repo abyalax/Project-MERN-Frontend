@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../redux/hooks";
 import { AppDispatch } from "../../redux/store";
 import { Login, Register, VerifyEmail } from "../../redux/slice/userSlice";
 import { Login as LoginService } from "../../services/auth";
+import { ToasterContext } from "../../context/toaster-context";
+import { useAppDispatch } from "../../redux/hooks";
 
 const LoginForm = () => {
     const dispatch: AppDispatch = useAppDispatch();
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
+    const { setToaster } = useContext(ToasterContext)
     const [formState, setFormState] = useState({
         email: "",
         password: ""
@@ -24,10 +26,38 @@ const LoginForm = () => {
         e.preventDefault();
         setIsLoading(true)
         try {
-            const response = await LoginService(formState.email, formState.password);
-            if (!response.status) {
-                return alert("Something went wrong");
+            if (!formState.email || !formState.password || formState.email === "" || formState.password === "") {
+                setToaster({
+                    variant: "warning",
+                    message: "Email or Password can't be empty"
+                })
+                return
             }
+            const response = await LoginService(formState.email, formState.password);
+            if (response.statusCode === 400) {
+                setToaster({
+                    variant: "danger",
+                    message: "Username or Password Wrong"
+                })
+                return
+            }
+            if (response.statusCode === 401) {
+                setToaster({
+                    variant: "danger",
+                    message: "Incorrect password"
+                })
+            }
+            if (response.statusCode === 404) {
+                setToaster({
+                    variant: "danger",
+                    message: "Email Not Found, please register first"
+                })
+                return
+            }
+            setToaster({
+                variant: "success",
+                message: "Login Success"
+            })
             localStorage.setItem("userSession", JSON.stringify({ ...response.data.user, isLogin: true }));
             dispatch(VerifyEmail(response.data.user.verifiedEmail));
             dispatch(Register({ name: response.data.user.name, email: response.data.user.email }));
@@ -35,6 +65,10 @@ const LoginForm = () => {
             setIsLoading(false)
             navigate("/home")
         } catch (error) {
+            setToaster({
+                variant: "danger",
+                message: "Something Wrong, please try again"
+            })
             console.error(error);
             setIsLoading(false)
         } finally {
@@ -46,7 +80,7 @@ const LoginForm = () => {
         <div className="bg-white drop-shadow-full p-10 max-w-[400px]  rounded-xl xl:w-2/3 lg:w-1/3 md:w-1/2  sm:w-2/3">
             <div className="flex justify-between items-center my-8">
                 <h2 className="text-2xl font-semibold">Masuk ke Tokopedia</h2>
-                <Link to="/auth/register" className="text-[#00AA5B] text-sm font-bold text-end">Daftar</Link>
+                <Link to="/auth/send-email" className="text-[#00AA5B] text-sm font-bold text-end">Daftar</Link>
             </div>
             <form className="w-full" onSubmit={(e) => onSubmit(e)}>
                 <input type="email" name="email" placeholder="Masukkan Email" onChange={(e) => onChange(e, "email")} className="border border-gray-400 w-full p-3 focus:outline-none focus:ring-1 focus:ring-green-500 rounded-lg" />
@@ -65,7 +99,7 @@ const LoginForm = () => {
                 <hr className="border w-1/3 border-slate-300" />
             </div>
             <div className="flex flex-col gap-6">
-                <button className="border flex justify-center items-center gap-3 border-slate-400 w-full p-2 rounded-xl font-semibold text-lg">
+                <button disabled={true} className="border flex justify-center items-center gap-3 border-slate-400 w-full p-2 rounded-xl font-semibold text-lg disabled:cursor-not-allowed disabled:hover:text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-qr-code-scan" viewBox="0 0 16 16">
                         <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5M.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5M4 4h1v1H4z" />
                         <path d="M7 2H2v5h5zM3 3h3v3H3zm2 8H4v1h1z" />

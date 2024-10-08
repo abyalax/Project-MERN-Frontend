@@ -1,13 +1,15 @@
 
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { VerifyEmail } from "../../services/auth";
+import { ToasterContext } from "../../context/toaster-context";
 
 const RegisterEmailForm = () => {
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
+    const { setToaster } = useContext(ToasterContext)
 
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,10 +20,38 @@ const RegisterEmailForm = () => {
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true)
+        if (!email || email === "") {
+            setToaster({
+                variant: "warning",
+                message: "Email can't be empty"
+            }); return
+        }
+        if (email.includes('$') || email.includes('%') || email.includes('/')) {
+            setToaster({
+                variant: "warning",
+                message: "Email can't contain special characters"
+            }); return
+        }
         try {
             const response = await VerifyEmail(email)
-            if (response.status === false) {
-                return alert("Something went wrong");
+            if (response.statusCode === 400) {
+                setToaster({
+                    variant: "warning",
+                    message: "Something wrong, check your connection"
+                }); return
+            }
+            if (response.statusCode === 409) {
+                setToaster({
+                    variant: "warning",
+                    message: "Your email is already verified, please register"
+                })
+                navigate('/auth/register')
+            }
+            if (response.statusCode === 424) {
+                setToaster({
+                    variant: "danger",
+                    message: "Failed Create verification, try again later"
+                }); return
             }
             navigate("/auth/check-email");
             setIsLoading(false)

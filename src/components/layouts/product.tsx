@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import dataProduct, { dataProductType } from "../../assets/img/product";
 import { svg } from "../../assets";
 import Navbar from "../fragments/navbar";
 import Ulasan from "./ulasan";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const Product = () => {
     const { nameStore, productSlug } = useParams()
     const [product, setProduct] = useState<dataProductType>()
+    const dataUser = useSelector((state: RootState) => state.user.data)
+    const navigate = useNavigate()
 
     const reverseFormat = (item: string) => {
         return item.replace(/-/g, ' ')
@@ -21,9 +25,12 @@ const Product = () => {
                 const result = dataProduct.find((product) => product.storeName.toLowerCase() === store && product.name.toLowerCase() === prod)
                 setProduct(result)
             }
+            
         }
         fetchProduct()
     }, [nameStore, productSlug])
+
+
 
     const handleScroll = () => {
         const img = document.getElementById('imgProduct')
@@ -44,6 +51,14 @@ const Product = () => {
             removeEventListener('scroll', handleScroll)
         }
     }, [])
+
+    const handleAddToCart = (namaProduct: string) => {
+        if (dataUser.name === '' || dataUser.email === '' || dataUser.isLogin === false) {
+            navigate('/auth/login')
+            return
+        }
+        console.log(namaProduct)
+    }
 
     return (
         <>
@@ -185,7 +200,7 @@ const Product = () => {
                                 <h2 className="text-slate-500 font-semibold">Subtotal</h2>
                                 <b className="text-xl">Rp199.000</b>
                             </div>
-                            <button className="w-full rounded-md font-semibold py-2 mb-2 mt-6 text-white bg-green-600 hover:bg-green-700">+ Keranjang</button>
+                            <button onClick={() => handleAddToCart(product?.name || "")} className="w-full rounded-md font-semibold py-2 mb-2 mt-6 text-white bg-green-600 hover:bg-green-700">+ Keranjang</button>
                             <button className="w-full rounded-md font-semibold py-2  text-green-600 border-2 border-green-500">Beli Langsung</button>
                             <div className="grid grid-cols-3 mt-4 pt-2 pb-1">
                                 <button className="flex justify-center gap-2 items-center bg-transparent text-sm font-semibold border-r border-slate-400">

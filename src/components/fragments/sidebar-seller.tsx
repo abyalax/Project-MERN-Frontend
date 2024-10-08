@@ -1,7 +1,7 @@
 import { image, svg } from "../../assets";
-import { Stores } from "../../types";
 import Routes from "../../assets/sidebar/routes";
 import { Link } from "react-router-dom";
+import { Stores } from "../../types/stores";
 
 const SidebarSeller = ({ store }: { store?: Stores }) => {
 

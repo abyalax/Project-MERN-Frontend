@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Address, Cart, Stores } from '../types';
 import { useDispatch } from 'react-redux';
 import { Login, RefreshData } from "../redux/slice/userSlice"
 import { useNavigate } from 'react-router-dom';
+import { Address } from '../types/address';
+import { Cart } from '../types/user';
+import { Stores } from '../types/stores';
 
 type UserSession = {
   name: string;
@@ -55,6 +57,10 @@ function useUserSession() {
           dispatch(RefreshData(result.data));
   
           navigate('/home');
+        } else if (result.status === 404) {
+          navigate('/auth/send-email')
+        } else if (result.status === 403) {
+          navigate('/auth/login')
         } else {
           localStorage.removeItem('userSession');
           setSession(null);

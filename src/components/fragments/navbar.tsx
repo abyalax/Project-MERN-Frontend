@@ -1,10 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { image, svg } from "../../assets";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Dropdown from "./dropdown";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { logout } from "../../services/auth";
+import { ToasterContext } from "../../context/toaster-context";
 
 interface NavProps {
     classname?: string
@@ -15,16 +16,30 @@ const Navbar = ({ classname }: NavProps) => {
     const [isOpen, setIsOpen] = useState(false)
     const navigate = useNavigate()
     const dataUser = useSelector((state: RootState) => state.user.data)
+    const { setToaster } = useContext(ToasterContext)
 
     const handleLogout = async () => {
         try {
             const response = await logout()
-            if (response.status === true) {
-                alert('Logged out successfully')
+            if (response.statusCode === 200) {
+                setToaster({
+                    variant: "success",
+                    message: "Logged out successfully"
+                })
                 localStorage.removeItem('userSession')
                 navigate('/auth/login')
-            }  else {
-                alert('Something went wrong')
+            }
+            if (response.statusCode === 401) {
+                navigate('/auth/login')
+            }
+            if (response.statusCode === 403) {
+                navigate('/auth/login')
+            }
+            if (response.statusCode === 500) {
+                setToaster({
+                    variant: "danger",
+                    message: "Logout Failed, Internal Server Error",
+                })
             }
         } catch (error) {
             console.error(error)
@@ -137,7 +152,7 @@ const Navbar = ({ classname }: NavProps) => {
                             </div>
                         </div>
 
-                        {dataUser.isLogin ? (
+                        {dataUser.name !== "" && dataUser.stores.length === 0 ? (
                             <div className="col-span-2 flex gap-7 justify-center">
                                 <div onMouseOver={() => document.getElementById('store')?.classList.remove('hidden')}
                                     onMouseLeave={() => document.getElementById('store')?.classList.add('hidden')}
