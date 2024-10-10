@@ -152,7 +152,7 @@ const Navbar = ({ classname }: NavProps) => {
                             </div>
                         </div>
 
-                        {dataUser.name !== "" && dataUser.stores.length === 0 ? (
+                        {dataUser.name !== "" ? (
                             <div className="col-span-2 flex gap-7 justify-center">
                                 <div onMouseOver={() => document.getElementById('store')?.classList.remove('hidden')}
                                     onMouseLeave={() => document.getElementById('store')?.classList.add('hidden')}

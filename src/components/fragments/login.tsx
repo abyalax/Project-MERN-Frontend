@@ -25,27 +25,27 @@ const LoginForm = () => {
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true)
+        if (!formState.email || !formState.password || formState.email === "" || formState.password === "") {
+            setToaster({
+                variant: "warning",
+                message: "Email or Password can't be empty"
+            })
+            return
+        }
         try {
-            if (!formState.email || !formState.password || formState.email === "" || formState.password === "") {
-                setToaster({
-                    variant: "warning",
-                    message: "Email or Password can't be empty"
-                })
-                return
-            }
             const response = await LoginService(formState.email, formState.password);
+            if (response.statusCode === 401) {
+                setToaster({
+                    variant: "danger",
+                    message: "Incorrect password"
+                }); return
+            }
             if (response.statusCode === 400) {
                 setToaster({
                     variant: "danger",
                     message: "Username or Password Wrong"
                 })
                 return
-            }
-            if (response.statusCode === 401) {
-                setToaster({
-                    variant: "danger",
-                    message: "Incorrect password"
-                })
             }
             if (response.statusCode === 404) {
                 setToaster({
@@ -71,6 +71,7 @@ const LoginForm = () => {
             })
             console.error(error);
             setIsLoading(false)
+            return
         } finally {
             setIsLoading(false)
         }

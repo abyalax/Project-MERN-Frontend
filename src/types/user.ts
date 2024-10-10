@@ -1,4 +1,5 @@
 import { Address } from "./address"
+import { Cart } from "./products"
 
 export interface User {
     name: string
@@ -11,11 +12,4 @@ export interface User {
     address: Address[]
     carts: Cart[]
     stores: string[]
-}
-
-export interface Cart {
-    productId: string
-    quantity: number
-    price: number
-    liked: boolean
 }

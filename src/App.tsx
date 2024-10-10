@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import useUserSession from "./hooks/use-session";
-import { Link, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import "./utils/index.js"
 
 function App() {
   const userSession = useUserSession();
@@ -10,12 +11,9 @@ function App() {
     if (!userSession.loading) {
       navigate('/home')
     }
+    return () => {};
   }, [navigate, userSession.loading])
-  return (
-    <div className="App">
-      <Link to={"/home"}>Ke Halaman Product</Link>
-    </div>
-  )
+  return <Navigate to="/home" />
 }
 
 

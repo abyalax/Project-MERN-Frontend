@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { Login, RefreshData } from "../redux/slice/userSlice"
 import { useNavigate } from 'react-router-dom';
 import { Address } from '../types/address';
-import { Cart } from '../types/user';
 import { Stores } from '../types/stores';
+import { Cart } from '../types/products';
 
 type UserSession = {
   name: string;

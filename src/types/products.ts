@@ -1,6 +1,7 @@
 import { Review } from "./review"
 
 export interface Product {
+    _id: string
     name: string
     nameStore: string
     description: string
@@ -22,9 +23,12 @@ export enum Condition {
     USED = 'used',
 }
 
-export type ProductCart = {
+export interface Cart {
+    productId: string
     name: string
-    image: { secure_url: string }[]
-    price: number
+    nameStore: string
+    image: { secure_url: string }
     quantity: number
+    price: number
+    liked: boolean
 }

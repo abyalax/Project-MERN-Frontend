@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { Login, Register, VerifyEmail } from '../../redux/slice/userSlice';
+import { Login, RefreshData, Register, VerifyEmail } from '../../redux/slice/userSlice';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -21,9 +21,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
           const parsedSession = JSON.parse(userSession);
           if (parsedSession.isLogin) {
             setLocalLoginStatus(true);
-
             dispatch(Register({ name: parsedSession.name, email: parsedSession.email }));
-            dispatch(Login(parsedSession));
+            dispatch(RefreshData(parsedSession))
+            dispatch(Login(true));
             dispatch(VerifyEmail(parsedSession.verifiedEmail));
           } else {
             setLocalLoginStatus(false);

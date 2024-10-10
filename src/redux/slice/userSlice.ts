@@ -1,9 +1,8 @@
 import { AddressResponse } from './../../types/response';
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-// import type { User } from "../../types";
 import type { User } from "../../types/user";
-import type { Cart } from '../../types/user';
+import { Cart } from '../../types/products';
 
 interface UserState {
     data: User

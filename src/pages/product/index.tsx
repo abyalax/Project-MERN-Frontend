@@ -1,47 +1,45 @@
-import { useEffect, useState } from "react";
+import Navbar from "../../components/fragments/navbar";
+import Ulasan from "../../components/layouts/ulasan";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import dataProduct, { dataProductType } from "../../assets/img/product";
-import { svg } from "../../assets";
-import Navbar from "../fragments/navbar";
-import Ulasan from "./ulasan";
+import { Cart, Product } from "../../types/products";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { GetProductsByID } from "../../services/products";
+import { svg } from "../../assets";
+import { useAppDispatch } from "../../redux/hooks";
+import { AddToCart } from "../../redux/slice/userSlice";
+import { formatPrice } from "../../utils";
+import { AddToCart as AddToCartServices } from "../../services/carts";
+import { ToasterContext } from "../../context/toaster-context";
 
-const Product = () => {
-    const { nameStore, productSlug } = useParams()
-    const [product, setProduct] = useState<dataProductType>()
+const ProductPage = () => {
+    const { nameStore, _id } = useParams()
+    const [product, setProduct] = useState<Product>()
     const dataUser = useSelector((state: RootState) => state.user.data)
     const navigate = useNavigate()
-
-    const reverseFormat = (item: string) => {
-        return item.replace(/-/g, ' ')
-    }
+    const dispatch = useAppDispatch()
+    const { setToaster } = useContext(ToasterContext)
 
     useEffect(() => {
         const fetchProduct = async () => {
-            if (productSlug && nameStore) {
-                const prod = reverseFormat(productSlug)
-                const store = reverseFormat(nameStore)
-                const result = dataProduct.find((product) => product.storeName.toLowerCase() === store && product.name.toLowerCase() === prod)
-                setProduct(result)
+            if (nameStore && _id !== undefined) {
+                const response = await GetProductsByID(_id)
+                console.log(response)
+                setProduct(response.data)
             }
-            
         }
         fetchProduct()
-    }, [nameStore, productSlug])
-
-
+    }, [nameStore, _id])
 
     const handleScroll = () => {
         const img = document.getElementById('imgProduct')
         if (img === null) return
+        img.classList.add('fixed', 'top-44', 'w-80', 'h-80')
+        img.classList.remove('w-[90%]', 'static',)
         if (window.scrollY >= 640) {
             img.classList.remove('fixed', 'top-44', 'w-80', 'h-80')
-            img.classList.add('w-[94%]', 'static')
-
-        } else {
-            img.classList.add('fixed', 'top-44', 'w-80', 'h-80')
-            img.classList.remove('w-[94%]', 'static')
+            img.classList.add('w-[90%]', 'static')
         }
     }
 
@@ -52,12 +50,36 @@ const Product = () => {
         }
     }, [])
 
-    const handleAddToCart = (namaProduct: string) => {
+    const handleAddToCart = async () => {
         if (dataUser.name === '' || dataUser.email === '' || dataUser.isLogin === false) {
             navigate('/auth/login')
             return
         }
-        console.log(namaProduct)
+        if (product?._id !== undefined) {
+            const dataCard: Cart = {
+                productId: product._id,
+                quantity: 1,
+                price: product.price,
+                liked: false,
+                image: product.image[0],
+                name: product.name,
+                nameStore: product.nameStore
+            }
+            console.log(dataCard);
+            const response = await AddToCartServices(dataCard)
+            if (response.statusCode === 200) {
+                console.log("Success: ", response);
+                setToaster({
+                    variant: "success",
+                    message: "Product added to cart successfully"
+                })
+                dispatch(AddToCart(dataCard))
+                navigate('/user/carts')
+            } else {
+                console.log(response);
+            }
+            console.log(product);
+        }
     }
 
     return (
@@ -67,7 +89,7 @@ const Product = () => {
                 <div className="grid grid-cols-10 justify-center relative">
 
                     <div className="col-span-3 rounded-md px-7 flex items-end pb-3 relative">
-                        <img src={product?.image} id="imgProduct" className="rounded-xl fixed top-44 w-80 h-80" />
+                        <img src={product?.image[0].secure_url} id="imgProduct" className="rounded-xl object-cover object-center" />
                     </div>
 
                     <div className="col-span-5 pl-4" >
@@ -80,10 +102,10 @@ const Product = () => {
                             <p>Diskusi <span className="text-slate-24">(5)</span></p>
                         </div>
 
-                        <h2 className="text-3xl font-bold">Rp99.000</h2>
+                        <h2 className="text-3xl font-bold">{formatPrice(product?.price)}</h2>
                         <div className="flex mt-2 justify-start gap-2">
-                            <p className="text-xs bg-red-200 my-auto text-red-500 rounded-md px-2 py-1 w-fit font-bold">90%</p>
-                            <s className="text-slate-500 items-center">Rp499.000</s>
+                            <p className="text-xs bg-red-200 my-auto text-red-500 rounded-md px-2 py-1 w-fit font-bold">0%</p>
+                            <s className="text-slate-500 items-center">{formatPrice(product?.price)}</s>
                         </div>
 
                         <hr className="my-4" />
@@ -109,9 +131,9 @@ const Product = () => {
                         </div>
 
                         <div className="px-2 py-2">
-                            <h2 className="text-slate-600">Kondisi : <span className="text-black">Baru</span></h2>
-                            <h2 className="text-slate-600">Min Pemesanan : <span className="text-black">1</span></h2>
-                            <h2 className="text-slate-600">Etalase : <span className="text-green-600 font-bold">Microsoft</span></h2>
+                            <h2 className="text-slate-600">Kondisi : <span className="text-black">{product?.condition}</span></h2>
+                            <h2 className="text-slate-600">Min Pemesanan : <span className="text-black">{product?.minOrder}</span></h2>
+                            <h2 className="text-slate-600">Etalase : <span className="text-green-600 font-bold">{product?.etalase}</span></h2>
                             <p className="text-base mt-2">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi id unde repellendus nesciunt minus eum nisi eos tempora harum iusto magnam, accusantium illum possimus dolorem quia vitae molestiae. Porro, expedita.
                             </p>
@@ -125,11 +147,11 @@ const Product = () => {
                                 image
                             </div>
                             <div className="w-[60%] flex flex-col">
-                                <p className="font-bold text-black text-lg">Micross Store</p>
+                                <p className="font-bold text-black text-lg">{product?.nameStore}</p>
                                 <p className="mb-2">Online 6 Menit lalu</p>
                                 <div className="flex items-center text-sm gap-2">
                                     <img src={svg.star} className="w-4 h-4" />
-                                    <p>4.9 <span className="text-slate-500">(33,5 rb)</span></p>
+                                    <p>{product?.rate} <span className="text-slate-500">(33,5 rb)</span></p>
                                 </div>
                                 <div className="flex items-center text-sm gap-2">
                                     <img src={svg.clock} className="w-4 h-4" />
@@ -179,6 +201,7 @@ const Product = () => {
 
                     </div>
 
+                    {/* CART */}
                     <div className="col-span-2 fixed top-52 right-20 min-w-64 bg-white border-lg">
                         <div className="w-full border-2 border-slate-200 rounded-lg p-3">
                             <h2 className="font-bold text-black text-lg mb-6">Atur Jumlah dan Catatan</h2>
@@ -189,25 +212,25 @@ const Product = () => {
                                     <p>1</p>
                                     <button className="px-4 py-0 text-2xl text-green-500">+</button>
                                 </div>
-                                <h2 className="">Stok Total : <b>184</b></h2>
+                                <h2 className="">Stok Total : <b>{product?.stock}</b></h2>
                             </div>
 
                             <p className="text-slate-500 text-sm font-semibold">Max. Pembelian 10 Pcs</p>
                             <div className="w-full flex justify-end mt-6">
-                                <del className="text-slate-400 text-sm font-semibold">Rp300.000</del>
+                                <del className="text-slate-400 text-sm font-semibold">{formatPrice(product?.price)}</del>
                             </div>
                             <div className="flex justify-between mt-2">
                                 <h2 className="text-slate-500 font-semibold">Subtotal</h2>
-                                <b className="text-xl">Rp199.000</b>
+                                <b className="text-xl">{formatPrice(product?.price)}</b>
                             </div>
-                            <button onClick={() => handleAddToCart(product?.name || "")} className="w-full rounded-md font-semibold py-2 mb-2 mt-6 text-white bg-green-600 hover:bg-green-700">+ Keranjang</button>
+                            <button onClick={() => handleAddToCart()} className="w-full rounded-md font-semibold py-2 mb-2 mt-6 text-white bg-green-600 hover:bg-green-700">+ Keranjang</button>
                             <button className="w-full rounded-md font-semibold py-2  text-green-600 border-2 border-green-500">Beli Langsung</button>
-                            <div className="grid grid-cols-3 mt-4 pt-2 pb-1">
+                            <div className="grid grid-cols-3 mt-4 pt-2 pb-1 gap-2">
                                 <button className="flex justify-center gap-2 items-center bg-transparent text-sm font-semibold border-r border-slate-400">
                                     <img src={svg.chat} className="w-3 p-0 h-3" />
                                     Chat
                                 </button>
-                                <button className="flex justify-center gap-2 items-center bg-transparent text-sm font-semibold border-r border-slate-400">
+                                <button className="flex justify-center gap-2 items-center bg-transparent text-sm font-semibold  pr-2 border-r border-slate-400">
                                     <img src={svg.love} className="w-3 p-0 h-3" />
                                     WistList
                                 </button>
@@ -227,4 +250,4 @@ const Product = () => {
         </>
     )
 };
-export default Product
+export default ProductPage

@@ -38,8 +38,21 @@ export const CreateProduct = async (form: Params) => {
     return data
 }
 
-export const GetProducts = async () => {
-    const response = await fetch('http://localhost:4000/api/products', {
+export interface FilterParams {
+    key: string
+    value: string
+  }
+
+export const GetProducts = async (filter?: FilterParams) => {
+    if (!filter) {
+        const response = await fetch("http://localhost:4000/api/products", {
+            method: "get",
+            credentials: "include",
+        })
+        const data = await response.json();
+        return data
+    }
+    const response = await fetch(`http://localhost:4000/api/products/filter?${filter.key}=${filter.value}`, {
         method: "get",
         credentials: "include",
     })
@@ -47,8 +60,8 @@ export const GetProducts = async () => {
     return data
 }
 
-export const GetProductsByStore = async () => {
-    const response = await fetch('http://localhost:4000/api/products', {
+export const GetProductsByID = async (id: string) => {
+    const response = await fetch(`http://localhost:4000/api/products/${id}`, {
         method: "get",
         credentials: "include",
     })

@@ -54,6 +54,7 @@ import cookie from "./svg/cookie.svg"
 import note from "./svg/note.svg"
 import addImage from "./svg/add-image.svg"
 import addVideo from "./svg/add-video.svg"
+import trash from "./svg/trash.svg"
 
 import a from "./banners/1.png"
 import b from "./banners/2.png"
@@ -77,7 +78,7 @@ const svg = {
     scan, search, notification, mail, phone, detail, all, star,
     facebook, twitter, pinterest, instagram, googlePlay, apple,
     bag, square, geo, clock, truck, chat, love, share, thumb,
-    settings, check, cookie, note, addImage, addVideo
+    settings, check, cookie, note, addImage, addVideo, trash
 }
 
 const image = {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Modal from "../../../components/fragments/modal";
 import { image, svg } from "../../../assets";
 import { GetStoresByID } from "../../../services/stores";
@@ -8,15 +8,14 @@ import NavbarSeller from "../../../components/fragments/navbar-seller";
 import SidebarSeller from "../../../components/fragments/sidebar-seller";
 import { Link, useNavigate } from "react-router-dom";
 import { Stores } from "../../../types/stores";
+import { ToasterContext } from "../../../context/toaster-context";
 
 const DashboardStore = () => {
     const navigate = useNavigate();
+    const { setToaster } = useContext(ToasterContext)
     const [showModal, setShowModal] = useState(false);
     const userId = useSelector((state: RootState) => state.user.data.stores[0]);
     console.log("userId from state store", userId);
-    if (userId === undefined) {
-        navigate('/store/create-store')
-    }
 
     const [store, setStore] = useState<Stores>();
     console.log("store from state store", store?.store);
@@ -24,17 +23,27 @@ const DashboardStore = () => {
     const getDetail = async (userId: string) => {
         try {
             console.log("Try Fetch with userId :", userId);
-            if (userId !== undefined) {
+            if (userId) {
                 const response = await GetStoresByID(userId)
-                if (response.status === true) {
+                if (response.statusCode === 200) {
                     setStore(response.data)
                 }
-            } else {
-                console.error("userId not found");
+                if (response.statusCode === 403) {
+                    setStore(undefined)
+                    navigate('/auth/login')
+                }
+                if (response.statusCode === 404) {
+                    setStore(undefined)
+                    navigate('/store/create-store')
+                }
             }
         } catch (error) {
             console.log(error);
             console.error("Failed fetch Store data", error);
+            setToaster({
+                variant: "danger",
+                message: "Something wrong, try again later"
+            }); return
         }
     }
     useEffect(() => {

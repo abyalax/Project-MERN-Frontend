@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Product } from "../../utils/type";
 import { Link, useLocation } from "react-router-dom";
 import Carousel from "./carousel";
 import { svg, image } from "../../assets";
+import { GetProducts } from "../../services/products";
+import { Product } from "../../types/products";
 
 const Category = () => {
 
@@ -16,10 +17,15 @@ const Category = () => {
     const location = useLocation()
     const pathname = location.pathname
 
+    const fetchData = async () => {
+        const response = await GetProducts()
+        if (response.statusCode === 200) {
+            setData(response.data)
+        }
+    }
+
     useEffect(() => {
-        fetch('https://fakestoreapi.com/products')
-            .then(res => res.json())
-            .then(json => setData(json))
+        fetchData()
     }, [])
 
 
@@ -98,12 +104,12 @@ const Category = () => {
                                 transition: 'transform 0.5s ease-in-out',
                             }} className="relative py-6 flex">
 
-                                {data.map((item: Product, index: number) => (
+                                {data.map((item, index: number) => (
                                     <div key={index} className="w-full px-2 flex items-center justify-center">
                                         {/* Konten Item */}
                                         <div className="h-32 w-32 border border-slate-200 rounded-lg flex justify-center items-center flex-col">
-                                            <img src={item.image} className="h-14 w-14" />
-                                            <p className=" text-wrap font-bold">{item.title.length > 10 ? item.title.substring(0, 10) + '...' : item.title}</p>
+                                            <img src={item.image[0].secure_url} className="h-14 w-14" />
+                                            <p className=" text-wrap font-bold">{item.name.length > 10 ? item.name.substring(0, 10) + '...' : item.name}</p>
                                         </div>
                                     </div>
                                 ))}
