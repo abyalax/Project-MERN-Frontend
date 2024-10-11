@@ -6,20 +6,23 @@ import { Cart, Product } from "../../types/products";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { GetProductsByID } from "../../services/products";
-import { svg } from "../../assets";
+import { image, svg } from "../../assets";
 import { useAppDispatch } from "../../redux/hooks";
-import { AddToCart } from "../../redux/slice/userSlice";
+import { AddToCart, RefreshData } from "../../redux/slice/userSlice";
 import { formatPrice } from "../../utils";
 import { AddToCart as AddToCartServices } from "../../services/carts";
 import { ToasterContext } from "../../context/toaster-context";
+import ModalCart from "../../components/modal/cart";
+import { User } from "../../types/user";
 
 const ProductPage = () => {
     const { nameStore, _id } = useParams()
     const [product, setProduct] = useState<Product>()
-    const dataUser = useSelector((state: RootState) => state.user.data)
+    const dataUser = useSelector((state: RootState) => state.data)
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const { setToaster } = useContext(ToasterContext)
+    const [openModal, setOpenModal] = useState(false)
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -44,11 +47,13 @@ const ProductPage = () => {
     }
 
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll)
+        window.scrollTo(0, 0);
+        window.addEventListener('scroll', handleScroll);
         return () => {
-            removeEventListener('scroll', handleScroll)
-        }
-    }, [])
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
 
     const handleAddToCart = async () => {
         if (dataUser.name === '' || dataUser.email === '' || dataUser.isLogin === false) {
@@ -65,7 +70,20 @@ const ProductPage = () => {
                 name: product.name,
                 nameStore: product.nameStore
             }
-            console.log(dataCard);
+            dispatch(AddToCart(dataCard))
+            const data:User = {
+                name: dataUser.name,
+                email: dataUser.email,
+                phone: dataUser.phone,
+                profileImage: dataUser.profileImage,
+                role: dataUser.role,
+                address: dataUser.address,
+                carts: [...dataUser.carts, dataCard],
+                stores: dataUser.stores,
+                verifiedEmail: true,
+                isLogin: true
+            }
+            dispatch(RefreshData(data))
             const response = await AddToCartServices(dataCard)
             if (response.statusCode === 200) {
                 console.log("Success: ", response);
@@ -73,8 +91,9 @@ const ProductPage = () => {
                     variant: "success",
                     message: "Product added to cart successfully"
                 })
-                dispatch(AddToCart(dataCard))
-                navigate('/user/carts')
+                console.log(openModal);
+                setOpenModal(true)
+                console.log(openModal);
             } else {
                 console.log(response);
             }
@@ -84,6 +103,7 @@ const ProductPage = () => {
 
     return (
         <>
+            {openModal && <ModalCart name={product?.name} image={product?.image[0].secure_url ? product?.image[0].secure_url : image.skeleton} setOpen={setOpenModal} />}
             <Navbar classname="sticky bg-white top-0 z-10" />
             <section className="pl-20 pr-28 pt-5 relative">
                 <div className="grid grid-cols-10 justify-center relative">
@@ -93,7 +113,6 @@ const ProductPage = () => {
                     </div>
 
                     <div className="col-span-5 pl-4" >
-
                         <h2 className="font-semibold text-lg">{product?.name}</h2>
                         <div className="flex mb-4 gap-3">
                             <p>Terjual <span className="text-slate-500">250+</span></p>

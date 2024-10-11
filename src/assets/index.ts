@@ -16,6 +16,7 @@ import geoTokopedia from "./tokopedia/geo-tokopedia.png"
 import successTokopedia from "./tokopedia/success-tokopedia.png"
 import haloStore from "./tokopedia/halo-store.png"
 import book from "./tokopedia/book-tokopedia.png"
+import skeleton from "./img/skeleton.png"
 
 import card from "./svg/credit-card.svg"
 import cart from "./svg/cart.svg"
@@ -85,7 +86,7 @@ const image = {
     gopay, money, bgAuth, profile, tokopedia, store, bill,
     invoice, pci, ISO, footerTokopedia, cartImage, notifImg,
     creStore, geoTokopedia, successTokopedia, haloStore,
-    book
+    book, skeleton
 }
 
 const banners = [a, b, c, d]

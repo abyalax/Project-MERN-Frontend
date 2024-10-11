@@ -58,7 +58,6 @@ const LoginForm = () => {
                 variant: "success",
                 message: "Login Success"
             })
-            localStorage.setItem("userSession", JSON.stringify({ ...response.data.user, isLogin: true }));
             dispatch(VerifyEmail(response.data.user.verifiedEmail));
             dispatch(Register({ name: response.data.user.name, email: response.data.user.email }));
             dispatch(Login(true));

@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { image, svg } from "../../assets";
 import { useState } from "react";
-import useUserSession from "../../hooks/use-session";
 import Dropdown from "./dropdown";
+import { RootState } from "../../redux/store";
+import { useSelector } from "react-redux";
 
 interface NavProps {
     classname?: string
@@ -12,7 +13,7 @@ const NavbarSeller = ({ classname }: NavProps) => {
 
     const [isOpen, setIsOpen] = useState(false)
     const navigate = useNavigate()
-    const userSession = useUserSession();
+    const dataUser = useSelector((state: RootState) => state.data)
 
     const logout = async () => {
         const response = await fetch('http://localhost:4000/api/auth/logout', {
@@ -25,7 +26,7 @@ const NavbarSeller = ({ classname }: NavProps) => {
         const result = await response.json();
         if (result.status) {
             alert('Logged out successfully')
-            localStorage.removeItem('userSession')
+            localStorage.removeItem('persist:root')
             navigate('/auth/login')
         } else {
             alert('Something went wrong')
@@ -97,7 +98,7 @@ const NavbarSeller = ({ classname }: NavProps) => {
 
                     </div>
 
-                    {userSession.session?.isLogin ? (
+                    {dataUser.isLogin ? (
                         <div className="col-span-2 flex gap-2 justify-center">
                             <div onMouseOver={() => document.getElementById('store')?.classList.remove('hidden')}
                                 onMouseLeave={() => document.getElementById('store')?.classList.add('hidden')}
@@ -116,11 +117,11 @@ const NavbarSeller = ({ classname }: NavProps) => {
                                 className="bg-transparent relative hover:bg-slate-200 rounded-lg py-2 px-3 flex gap-2 justify-center items-center"
                                 onClick={() => setIsOpen(!isOpen)}>
                                 <img src={image.profile} className="h-8 w-8 rounded-full" />
-                                {userSession.session.name.split(' ')[0]}
+                                {dataUser.name.split(' ')[0]}
                                 <Dropdown ID="profile" custom="w-[400px] top-10 px-0 right-0 ">
                                     <div className="flex items-center gap-2 w-[90%] p-3 mx-auto rounded-lg shadow-xl">
                                         <img src={image.profile} className="w-10 h-10 rounded-full" />
-                                        <p className="text-sm font-semibold">{userSession.session.name}</p>
+                                        <p className="text-sm font-semibold">{dataUser.name}</p>
                                     </div>
                                     <div className="grid grid-cols-5 py-4">
                                         <div className="col-span-3 text-start border border-slate-200 p-6">

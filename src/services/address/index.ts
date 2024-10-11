@@ -1,4 +1,6 @@
 export async function getAddressFromCoordinates(latitude: number, longitude: number) {
+    console.log({latitude, longitude});
+    
     try {
         const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&accept-language=id`);
         const data = await response.json();

@@ -15,7 +15,7 @@ const Navbar = ({ classname }: NavProps) => {
 
     const [isOpen, setIsOpen] = useState(false)
     const navigate = useNavigate()
-    const dataUser = useSelector((state: RootState) => state.user.data)
+    const dataUser = useSelector((state: RootState) => state.data)
     const { setToaster } = useContext(ToasterContext)
 
     const handleLogout = async () => {
@@ -26,7 +26,7 @@ const Navbar = ({ classname }: NavProps) => {
                     variant: "success",
                     message: "Logged out successfully"
                 })
-                localStorage.removeItem('userSession')
+                localStorage.removeItem('persist:root')
                 navigate('/auth/login')
             }
             if (response.statusCode === 401) {
@@ -152,7 +152,7 @@ const Navbar = ({ classname }: NavProps) => {
                             </div>
                         </div>
 
-                        {dataUser.name !== "" ? (
+                        { dataUser.isLogin ? (
                             <div className="col-span-2 flex gap-7 justify-center">
                                 <div onMouseOver={() => document.getElementById('store')?.classList.remove('hidden')}
                                     onMouseLeave={() => document.getElementById('store')?.classList.add('hidden')}

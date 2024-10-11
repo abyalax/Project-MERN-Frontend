@@ -8,15 +8,21 @@ import { formatPrice } from "../../../utils";
 import { svg } from "../../../assets";
 import { useNavigate } from "react-router-dom";
 import { ToasterContext } from "../../../context/toaster-context";
+import { useAppDispatch } from "../../../redux/hooks";
+import { UpdateCartByID, UpdateCarts } from "../../../redux/slice/userSlice";
+import { UpdateCartByID as UpdateCartByIDServices } from "../../../services/carts/index"
 
 interface GroupedCarts {
     [nameStore: string]: Cart[];
 }
 
 const CartPage = () => {
-    const navigate = useNavigate();
-    const cartsState = useSelector((state: RootState) => state.user.data.carts)
-    const [carts, setCarts] = useState<Cart[]>(cartsState);
+    const navigate = useNavigate()
+    const dispatch = useAppDispatch()
+    // const [selectedCart, setSelectedCart] = useState<Cart[]>([]) //TODO
+    const dataUser = useSelector((state: RootState) => state.data)
+    const stateCart = dataUser.carts
+    const [carts, setCarts] = useState<Cart[]>(stateCart);
     const { setToaster } = useContext(ToasterContext);
 
     const getDetail = async () => {
@@ -41,11 +47,11 @@ const CartPage = () => {
 
     useEffect(() => {
         getDetail();
-    }, []);  // Panggil hanya sekali saat pertama kali render
+    }, []);
 
     useEffect(() => {
-        setCarts(cartsState);  // Sinkronisasi state lokal dengan Redux
-    }, [cartsState]);
+        setCarts(stateCart);
+    }, [stateCart]);
 
     const groupedCarts: GroupedCarts = carts.reduce((acc, item) => {
         if (!acc[item.nameStore]) {
@@ -58,12 +64,99 @@ const CartPage = () => {
     const totalPrice = carts.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
     const handleDeleteCart = async (productId: string) => {
-        const response = await DeleteCart(productId);
-        if (response.statusCode === 200) {
-            setCarts((prevCarts) => prevCarts.filter(cart => cart.productId !== productId));
+        const updated = stateCart.filter(cart => cart.productId !== productId)
+        dispatch(UpdateCarts(updated))
+        try {
+            const response = await DeleteCart(productId);
+            if (response.statusCode === 200) {
+                setCarts((prevCarts) => prevCarts.filter(cart => cart.productId !== productId));
+                return
+            }
+            if (response.statusCode === 403) {
+                setToaster({
+                    variant: "warning",
+                    message: "Please Login First"
+                })
+                navigate('/auth/login');
+                return
+            }
+            if (response.statusCode === 404 || response.statusCode === 400) {
+                setToaster({
+                    variant: "danger",
+                    message: "Something Wrong, try again later"
+                }); return
+            } else {
+                console.log(response);
+            }
+        } catch (error) {
+            console.log(error);
+            setToaster({
+                variant: "danger",
+                message: "Something Wrong, try again later"
+            })
         }
-        console.log(response);
     };
+
+    const handlePlusCart = async (productId: string) => {
+        console.log(productId);
+        const cart = carts.find((item) => item.productId === productId);
+        console.log(cart);
+        if (cart) {
+            const updatedCart = { ...cart, quantity: cart.quantity + 1 };
+            console.log(updatedCart);
+            dispatch(UpdateCartByID(updatedCart));
+            const response = await UpdateCartByIDServices(updatedCart)
+            if (response.statusCode === 200) {
+                setToaster({
+                    variant: "success",
+                    message: "Update Cart Successfully"
+                });return
+            }
+            if (response.statusCode === 403) {
+                setToaster({
+                    variant: "warning",
+                    message: "Please Login First"
+                })
+                navigate('/auth/login');
+            }
+            if (response.statusCode === 400) {
+                setToaster({
+                    variant: "danger",
+                    message: "Something wrong, try again later"
+                });return
+            }
+        }
+    }
+
+    const handleMinusCart = async (productId: string) => {
+        const cart = carts.find((item) => item.productId === productId);
+        if (cart && cart.quantity > 1) {
+            const updatedCart = { ...cart, quantity: cart.quantity - 1 };
+            dispatch(UpdateCartByID(updatedCart));
+            console.log(updatedCart);
+            const response = await UpdateCartByIDServices(updatedCart)
+            if (response.statusCode === 200) {
+                setToaster({
+                    variant: "success",
+                    message: "Update Cart Successfully"
+                }); return
+            }
+            if (response.statusCode === 403) {
+                setToaster({
+                    variant: "warning",
+                    message: "Please Login First"
+                })
+                navigate('/auth/login');
+            }
+            if (response.statusCode === 400) {
+                setToaster({
+                    variant: "danger",
+                    message: "Something wrong, try again later"
+                }); return
+            }
+        }
+    }
+
 
     return (
         <>
@@ -84,7 +177,7 @@ const CartPage = () => {
                         {/* Tampilkan item berdasarkan grup store */}
                         <div className="min-w-[50vw] bg-white rounded-t-md rounded-b-2xl px-6 py-4 flex flex-col gap-4">
                             {Object.keys(groupedCarts).map((storeName) => (
-                                <div key={storeName}>
+                                <div key={storeName + Math.random()}>
                                     <div className="flex gap-1">
                                         <div className="pl-2 pr-6 h-full" >
                                             <input type="checkbox" className="w-5 h-5" />
@@ -92,7 +185,7 @@ const CartPage = () => {
                                         <h3 className="text-lg font-bold">{storeName}</h3>
                                     </div>
                                     {groupedCarts[storeName].map((item) => (
-                                        <div key={item.productId} className="flex flex-row border-b border-slate-200 my-4 py-2">
+                                        <div key={item.productId + Math.random()} className="flex flex-row border-b border-slate-200 my-4 py-2">
                                             <div className="h-full pl-2 pr-6">
                                                 <input type="checkbox" className="w-5 h-5" />
                                             </div>
@@ -110,9 +203,9 @@ const CartPage = () => {
                                                         <img src={svg.love} className="w-5 h-5 cursor-pointer" />
                                                         <img src={svg.trash} onClick={() => handleDeleteCart(item.productId)} className="w-5 h-5 cursor-pointer" />
                                                         <div className="flex items-center border border-slate-400 px-5 py-0.5 rounded-xl gap-6">
-                                                            <button className="text-xl text-slate-500">&#8722;</button>
+                                                            <button onClick={() => handleMinusCart(item.productId)} disabled={item.quantity === 1} className="text-xl text-slate-500 disabled:cursor-not-allowed">&#8722;</button>
                                                             <p>{item.quantity}</p>
-                                                            <button className="text-xl text-green-500">&#43;</button>
+                                                            <button onClick={() => handlePlusCart(item.productId)} className="text-xl text-green-500 ">&#43;</button>
                                                         </div>
                                                     </div>
                                                 </div>

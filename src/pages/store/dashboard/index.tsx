@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import Modal from "../../../components/fragments/modal";
+import Modal from "../../../components/modal/modal";
 import { image, svg } from "../../../assets";
 import { GetStoresByID } from "../../../services/stores";
 import { useSelector } from "react-redux";
@@ -14,7 +14,7 @@ const DashboardStore = () => {
     const navigate = useNavigate();
     const { setToaster } = useContext(ToasterContext)
     const [showModal, setShowModal] = useState(false);
-    const userId = useSelector((state: RootState) => state.user.data.stores[0]);
+    const userId = useSelector((state: RootState) => state.data.stores[0]);
     console.log("userId from state store", userId);
 
     const [store, setStore] = useState<Stores>();

@@ -47,11 +47,12 @@ const UserSlice = createSlice({
                 village: action.payload.village,
                 kodePost: action.payload.postcode
             }
-            state.data.address.push(data)
+            if (state.data.address.length === 0) {
+                state.data.address.push(data)
+            }; return
         },
         RefreshData: (state, action: PayloadAction<User>) => {
             state.data = action.payload
-            state.data.isLogin = true
         },
         CreateStore: (state, action: PayloadAction<string>) => {
             state.data.stores.push(action.payload)
@@ -63,11 +64,23 @@ const UserSlice = createSlice({
             } else {
                 state.data.carts.push(action.payload)
             }
+        },
+        UpdateCartByID: (state, action: PayloadAction<Cart>) => {
+            const itemCart = state.data.carts.find(item => item.productId === action.payload.productId);
+            if (itemCart) {
+                Object.assign(itemCart, action.payload);
+            }
+        },
+        UpdateCarts: (state, action: PayloadAction<Cart[]>) => {
+            if (Array.isArray(action.payload)) {
+                state.data.carts = action.payload;
+            }
         }
+
     }
 });
 
-export const { VerifyEmail, Login, Register, AddToCart, RefreshData, TrackAddress, CreateStore } = UserSlice.actions;
+export const { VerifyEmail, Login, Register, AddToCart, UpdateCartByID, UpdateCarts, RefreshData, TrackAddress, CreateStore } = UserSlice.actions;
 export default UserSlice.reducer;
 
 

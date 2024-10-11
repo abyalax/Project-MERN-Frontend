@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const SuccessCreateStore = () => {
-    const name = useSelector((state: RootState) => state.user.data.name);
+    const name = useSelector((state: RootState) => state.data.name);
     const navigate = useNavigate()
     
     useEffect(() => {

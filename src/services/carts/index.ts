@@ -50,3 +50,19 @@ export const DeleteCart = async (productId: string) => {
     console.log("Response after service delete cart: ",data);
     return data
 }
+
+export const UpdateCartByID = async (cart: Cart) => {
+    const response = await fetch('http://localhost:4000/api/user/carts', {
+        method: "put",
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            cart
+        })
+    })
+    const reponse = await response.json();
+    console.log("Response after service update cart: ",reponse);
+    return reponse
+}

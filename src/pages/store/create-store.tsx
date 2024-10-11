@@ -16,7 +16,7 @@ import { ToasterContext } from "../../context/toaster-context";
 
 const CreateStore = () => {
 
-  const dataUser = useSelector((state: RootState) => state.user.data)
+  const dataUser = useSelector((state: RootState) => state.data)
 
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);

@@ -8,10 +8,15 @@ import { FilterParams, GetProducts } from "../services/products";
 import { ToasterContext } from "../context/toaster-context";
 import { Product } from "../types/products";
 import { formatPrice } from "../utils";
+import { getAddressFromCoordinates } from "../services/address";
+import { AddressResponse } from "../types/response";
+import { useAppDispatch } from "../redux/hooks";
+import { TrackAddress } from "../redux/slice/userSlice";
 
 const Home = () => {
   const [product, setProduct] = useState<Product[]>([]);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch()
   const { setToaster } = useContext(ToasterContext);
 
   const fetchData = async (filter? : FilterParams) => {
@@ -38,6 +43,28 @@ const Home = () => {
   useEffect(() => {
     fetchData();
     return () => setProduct([]);
+  }, []);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          getAddressFromCoordinates(latitude, longitude).then((address: AddressResponse) => {
+            if (address) {
+              dispatch(TrackAddress(address))
+            } else {
+              console.log("Data alamat tidak ditemukan.");
+            }
+          });
+        },
+        (error) => {
+          console.log('Error getting location:', error);
+        }
+      );
+    } else {
+      console.log('Geolocation is not supported by this browser.');
+    }
   }, []);
 
   const formatURL = (item: string) => {
