@@ -1,5 +1,6 @@
 import Navbar from "../../components/fragments/navbar";
 import Ulasan from "../../components/layouts/ulasan";
+import ModalCart from "../../components/modal/cart";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Cart, Product } from "../../types/products";
@@ -12,17 +13,17 @@ import { AddToCart, RefreshData } from "../../redux/slice/userSlice";
 import { formatPrice } from "../../utils";
 import { AddToCart as AddToCartServices } from "../../services/carts";
 import { ToasterContext } from "../../context/toaster-context";
-import ModalCart from "../../components/modal/cart";
 import { User } from "../../types/user";
 
 const ProductPage = () => {
     const { nameStore, _id } = useParams()
-    const [product, setProduct] = useState<Product>()
     const dataUser = useSelector((state: RootState) => state.data)
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
+    const [product, setProduct] = useState<Product>()
     const { setToaster } = useContext(ToasterContext)
     const [openModal, setOpenModal] = useState(false)
+    const [mainImage, setMainImage] = useState(0)
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -35,17 +36,6 @@ const ProductPage = () => {
         fetchProduct()
     }, [nameStore, _id])
 
-    const handleScroll = () => {
-        const img = document.getElementById('imgProduct')
-        if (img === null) return
-        img.classList.add('fixed', 'top-44', 'w-80', 'h-80')
-        img.classList.remove('w-[90%]', 'static',)
-        if (window.scrollY >= 640) {
-            img.classList.remove('fixed', 'top-44', 'w-80', 'h-80')
-            img.classList.add('w-[90%]', 'static')
-        }
-    }
-
     useEffect(() => {
         window.scrollTo(0, 0);
         window.addEventListener('scroll', handleScroll);
@@ -53,7 +43,6 @@ const ProductPage = () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
-
 
     const handleAddToCart = async () => {
         if (dataUser.name === '' || dataUser.email === '' || dataUser.isLogin === false) {
@@ -71,7 +60,7 @@ const ProductPage = () => {
                 nameStore: product.nameStore
             }
             dispatch(AddToCart(dataCard))
-            const data:User = {
+            const data: User = {
                 name: dataUser.name,
                 email: dataUser.email,
                 phone: dataUser.phone,
@@ -85,6 +74,22 @@ const ProductPage = () => {
             }
             dispatch(RefreshData(data))
             const response = await AddToCartServices(dataCard)
+            if (response.statusCode === 401) {
+                setToaster({
+                    variant: "warning",
+                    message: "Please login first"
+                })
+                navigate('/auth/login')
+                return
+            }
+            if (response.statusCode === 403) {
+                setToaster({
+                    variant: "warning",
+                    message: "Please login first"
+                })
+                navigate('/auth/login')
+                return
+            }
             if (response.statusCode === 200) {
                 console.log("Success: ", response);
                 setToaster({
@@ -101,6 +106,17 @@ const ProductPage = () => {
         }
     }
 
+    const handleScroll = () => {
+        const img = document.getElementById('imgProduct')
+        if (img === null) return
+        img.classList.add('fixed', 'top-44', 'max-w-[300px]', 'max-h-[300px]')
+        img.classList.remove('w-[99%]', 'static', 'mx-auto')
+        if (window.scrollY >= 560) {
+            img.classList.remove('fixed', 'top-44', 'max-w-[300px]', 'max-h-[300px]')
+            img.classList.add('w-[99%]', 'static', 'mx-auto')
+        }
+    }
+
     return (
         <>
             {openModal && <ModalCart name={product?.name} image={product?.image[0].secure_url ? product?.image[0].secure_url : image.skeleton} setOpen={setOpenModal} />}
@@ -108,8 +124,19 @@ const ProductPage = () => {
             <section className="pl-20 pr-28 pt-5 relative">
                 <div className="grid grid-cols-10 justify-center relative">
 
-                    <div className="col-span-3 rounded-md px-7 flex items-end pb-3 relative">
-                        <img src={product?.image[0].secure_url} id="imgProduct" className="rounded-xl object-cover object-center" />
+                    <div className="col-span-3  px-14 rounded-md flex items-end pb-3 relative">
+                        <div id="imgProduct" className="rounded-xl mx-auto max-w-[300px] max-h-[300px]">
+                            <img src={product?.image[mainImage].secure_url} className="rounded-xl object-cover object-center aspect-square" />
+                            <div className="container mx-auto py-2">
+                                <div className="overflow-x-auto whitespace-nowrap" style={{ scrollbarWidth: "none" }}>
+                                    <div className="grid grid-flow-col auto-cols-[minmax(60px,1fr)] gap-2 items-center h-20">
+                                        {product?.image.map((image, index) => (
+                                            <img src={image.secure_url} onClick={() => setMainImage(index)} key={image.secure_url} className="inline-grid cursor-pointer rounded-xl w-16 h-16" />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="col-span-5 pl-4" >
@@ -154,7 +181,7 @@ const ProductPage = () => {
                             <h2 className="text-slate-600">Min Pemesanan : <span className="text-black">{product?.minOrder}</span></h2>
                             <h2 className="text-slate-600">Etalase : <span className="text-green-600 font-bold">{product?.etalase}</span></h2>
                             <p className="text-base mt-2">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi id unde repellendus nesciunt minus eum nisi eos tempora harum iusto magnam, accusantium illum possimus dolorem quia vitae molestiae. Porro, expedita.
+                                {product?.description}
                             </p>
                             <b className="text-green-600 text-sm font-bold">lihat selengkapnya</b>
                         </div>
@@ -162,10 +189,10 @@ const ProductPage = () => {
                         <hr className="my-4" />
 
                         <div className="flex gap-2">
-                            <div className="w-[15%]">
-                                image
+                            <div className="w-[10%]">
+                                <img src={image.profile} className="w-14 h-14 rounded-full object-cover object-center" />
                             </div>
-                            <div className="w-[60%] flex flex-col">
+                            <div className="w-[65%] flex flex-col">
                                 <p className="font-bold text-black text-lg">{product?.nameStore}</p>
                                 <p className="mb-2">Online 6 Menit lalu</p>
                                 <div className="flex items-center text-sm gap-2">

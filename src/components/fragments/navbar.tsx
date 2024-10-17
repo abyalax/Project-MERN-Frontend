@@ -161,7 +161,7 @@ const Navbar = ({ classname }: NavProps) => {
                                     Toko
                                     <Dropdown ID="store" custom="w-[290px] top-12 p-5">
                                         <p className="font-semibold text-slate-500 text-sm text-center">Anda Belum Memiliki Toko</p>
-                                        <button className="bg-green-600 text-white font-semibold my-3 mx-[1.3rem] text-sm rounded-lg py-1.5 px-12">Buka Toko Gratis</button>
+                                        <button onClick={() => navigate('/store/create-store')} className="bg-green-600 text-white font-semibold my-3 mx-[1.3rem] text-sm rounded-lg py-1.5 px-12">Buka Toko Gratis</button>
                                         <p className="font-semibold text-slate-500 text-sm text-center">Tokomu Hilang ? <Link to={"#"} className="text-green-500">Pelajari Selengkapnya</Link></p>
                                     </Dropdown>
                                 </div>

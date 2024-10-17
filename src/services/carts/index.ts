@@ -1,9 +1,10 @@
 import { Cart } from "../../types/products";
-
+import { origin } from "../../utils/constant";
 export const AddToCart = async (form: Cart) => {
-    const response = await fetch('http://localhost:4000/api/user/carts', {
+    const response = await fetch(`${origin}/api/user/carts`, {
         method: "post",
         credentials: "include",
+        mode: "cors", 
         headers: {
             'Content-Type': 'application/json'
         },
@@ -18,27 +19,29 @@ export const AddToCart = async (form: Cart) => {
         })
     })
     const data = await response.json();
-    console.log("Response after service add cart: ",data);
+    console.log("Response after service add cart: ", data);
     return data
 }
 
 export const GetCarts = async () => {
-    const response = await fetch('http://localhost:4000/api/user/carts', {
+    const response = await fetch(`${origin}/api/user/carts`, {
         method: "get",
         credentials: "include",
+        mode: "cors", 
         headers: {
             'Content-Type': 'application/json'
         },
     })
     const data = await response.json();
-    console.log("Response after service get cart: ",data);
+    console.log("Response after service get cart: ", data);
     return data
 }
 
 export const DeleteCart = async (productId: string) => {
-    const response = await fetch('http://localhost:4000/api/user/carts', {
+    const response = await fetch(`${origin}/api/user/carts`, {
         method: "delete",
         credentials: "include",
+        mode: "cors", 
         headers: {
             'Content-Type': 'application/json'
         },
@@ -47,14 +50,15 @@ export const DeleteCart = async (productId: string) => {
         })
     })
     const data = await response.json();
-    console.log("Response after service delete cart: ",data);
+    console.log("Response after service delete cart: ", data);
     return data
 }
 
 export const UpdateCartByID = async (cart: Cart) => {
-    const response = await fetch('http://localhost:4000/api/user/carts', {
+    const response = await fetch(`${origin}/api/user/carts`, {
         method: "put",
         credentials: "include",
+        mode: "cors", 
         headers: {
             'Content-Type': 'application/json'
         },
@@ -63,6 +67,6 @@ export const UpdateCartByID = async (cart: Cart) => {
         })
     })
     const reponse = await response.json();
-    console.log("Response after service update cart: ",reponse);
+    console.log("Response after service update cart: ", reponse);
     return reponse
 }

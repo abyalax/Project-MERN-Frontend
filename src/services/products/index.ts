@@ -1,4 +1,5 @@
 import { Condition } from "../../types/products"
+import { origin } from "../../utils/constant"
 
 interface Params {
     nameStore: string
@@ -14,9 +15,10 @@ interface Params {
 }
 
 export const CreateProduct = async (form: Params) => {
-    const response = await fetch('http://localhost:4000/api/store/create-product', {
+    const response = await fetch(`${origin}/api/store/create-product`, {
         method: "post",
         credentials: "include",
+        mode: "cors", 
         headers: {
             'Content-Type': 'application/json'
         },
@@ -44,26 +46,30 @@ export interface FilterParams {
   }
 
 export const GetProducts = async (filter?: FilterParams) => {
+    console.log(origin, "From get product services");
+    
     if (!filter) {
-        const response = await fetch("http://localhost:4000/api/products", {
+        const response = await fetch(`${origin}/api/products`, {
             method: "get",
             credentials: "include",
         })
         const data = await response.json();
         return data
     }
-    const response = await fetch(`http://localhost:4000/api/products/filter?${filter.key}=${filter.value}`, {
+    const response = await fetch(`${origin}/api/products/filter?${filter.key}=${filter.value}`, {
         method: "get",
         credentials: "include",
+        mode: "cors", 
     })
     const data = await response.json();
     return data
 }
 
 export const GetProductsByID = async (id: string) => {
-    const response = await fetch(`http://localhost:4000/api/products/${id}`, {
+    const response = await fetch(`${origin}/api/products/${id}`, {
         method: "get",
         credentials: "include",
+        mode: "cors", 
     })
     const data = await response.json();
     return data

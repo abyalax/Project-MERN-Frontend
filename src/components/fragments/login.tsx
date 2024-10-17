@@ -30,17 +30,20 @@ const LoginForm = () => {
                 variant: "warning",
                 message: "Email or Password can't be empty"
             })
+            setIsLoading(false)
             return
         }
         try {
             const response = await LoginService(formState.email, formState.password);
             if (response.statusCode === 401) {
+                setIsLoading(false)
                 setToaster({
                     variant: "danger",
                     message: "Incorrect password"
                 }); return
             }
             if (response.statusCode === 400) {
+                setIsLoading(false)
                 setToaster({
                     variant: "danger",
                     message: "Username or Password Wrong"
@@ -48,6 +51,7 @@ const LoginForm = () => {
                 return
             }
             if (response.statusCode === 404) {
+                setIsLoading(false)
                 setToaster({
                     variant: "danger",
                     message: "Email Not Found, please register first"

@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from "react";
 import Footer from "../components/fragments/footer";
 import Navbar from "../components/fragments/navbar";
 import { useNavigate } from "react-router-dom";
-import { FilterParams, GetProducts } from "../services/products";
 import { ToasterContext } from "../context/toaster-context";
 import { Product } from "../types/products";
 import { formatPrice } from "../utils";
@@ -12,6 +11,7 @@ import { getAddressFromCoordinates } from "../services/address";
 import { AddressResponse } from "../types/response";
 import { useAppDispatch } from "../redux/hooks";
 import { TrackAddress } from "../redux/slice/userSlice";
+import { FilterParams, GetProducts } from "../services/products";
 
 const Home = () => {
   const [product, setProduct] = useState<Product[]>([]);
@@ -34,6 +34,7 @@ const Home = () => {
           message,
         });
       }
+      console.log(response);
     } catch (error) {
       console.error(error);
       alert("Something went wrong, please try again later");

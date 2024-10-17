@@ -114,6 +114,10 @@ const CreateStore = () => {
         });
         const result = await response.json();
         console.log(result);
+        if (result.statusCode === 200) {
+          dispatch(RefreshData(result.data));
+          return;
+        }
         if (result.statusCode === 401) {
           navigate("/auth/login")
           return
@@ -125,7 +129,6 @@ const CreateStore = () => {
           })
           return
         }
-        dispatch(RefreshData(result.data));
       } catch (error) {
         console.error(error);
       }

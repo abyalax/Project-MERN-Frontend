@@ -1,7 +1,10 @@
+import { origin } from "../../utils/constant";
+
 export const VerifyEmail = async (email: string) => {
-    const response = await fetch('http://localhost:4000/api/verify/send-email', {
+    const response = await fetch(`${origin}/api/verify/send-email`, {
         method: "post",
         credentials: "include",
+        mode: "cors", 
         headers: {
             'Content-Type': 'application/json'
         },
@@ -14,9 +17,10 @@ export const VerifyEmail = async (email: string) => {
 };
 
 export const attemptToVerify = async (code: string, email: string) => {
-    const response = await fetch('http://localhost:4000/api/verify/verify-email', {
+    const response = await fetch(`${origin}/api/verify/verify-email`, {
         method: "post",
         credentials: "include",
+        mode: "cors", 
         headers: {
             'Content-Type': 'application/json'
         },
@@ -30,9 +34,10 @@ export const attemptToVerify = async (code: string, email: string) => {
 }
 
 export const Register = async (name: string, email: string, password: string) => {
-    const response = await fetch('http://localhost:4000/api/auth/register', {
+    const response = await fetch(`${origin}/api/auth/register`, {
         method: "post",
         credentials: "include",
+        mode: "cors", 
         headers: {
             'Content-Type': 'application/json'
         },
@@ -47,9 +52,10 @@ export const Register = async (name: string, email: string, password: string) =>
 }
 
 export const Login = async (email: string, password: string) => {
-    const response = await fetch('http://localhost:4000/api/auth/login', {
+    const response = await fetch(`${origin}/api/auth/login`, {
         method: "post",
         credentials: "include",
+        mode: "cors", 
         headers: {
             'Content-Type': 'application/json'
         },
@@ -63,9 +69,10 @@ export const Login = async (email: string, password: string) => {
 }
 
 export const logout = async () => {
-    const response = await fetch('http://localhost:4000/api/auth/logout', {
+    const response = await fetch(`${origin}/api/auth/logout`, {
         method: "post",
         credentials: "include",
+        mode: "cors", 
         headers: {
             'Content-Type': 'application/json'
         },

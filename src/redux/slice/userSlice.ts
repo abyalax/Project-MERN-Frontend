@@ -53,6 +53,8 @@ const UserSlice = createSlice({
         },
         RefreshData: (state, action: PayloadAction<User>) => {
             state.data = action.payload
+            state.data.isLogin = true
+            state.data.verifiedEmail = true
         },
         CreateStore: (state, action: PayloadAction<string>) => {
             state.data.stores.push(action.payload)

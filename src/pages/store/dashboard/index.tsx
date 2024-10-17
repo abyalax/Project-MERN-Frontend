@@ -115,7 +115,7 @@ const DashboardStore = () => {
                             <button onClick={() => setShowModal(false)} className="bg-green-600 py-2 w-full rounded-lg my-2 text-white text-base font-semibold">Pelajari Tampilan Baru</button>
                         </div>
                     </Modal>
-                    <footer className="absolute bottom-0 left-0 right-0 w-screen bg-white z-30 px-8 py-4 flex justify-between">
+                    <footer className="fixed bottom-0 left-0 right-0 w-screen bg-white z-50 px-8 py-4 flex justify-between">
                         <div className="flex flex-col gap-2">
                             <h2 className="font-bold text-lg flex gap-2">Izinkan Penyimpanan Cookie
                                 <img src={svg.cookie} />

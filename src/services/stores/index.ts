@@ -1,3 +1,4 @@
+import { origin } from "../../utils/constant"
 
 interface Params {
     phone: string
@@ -13,9 +14,10 @@ interface Params {
 }
 
 export const CreateStore = async (form: Params) => {
-    const response = await fetch('http://localhost:4000/api/store/create-store', {
+    const response = await fetch(`${origin}/api/store/create-store`, {
         method: "post",
         credentials: "include",
+        mode: "cors", 
         headers: {
             'Content-Type': 'application/json'
         },
@@ -37,18 +39,20 @@ export const CreateStore = async (form: Params) => {
 }
 
 export const GetStores = async () => {
-    const response = await fetch('http://localhost:4000/api/user/stores', {
+    const response = await fetch(`${origin}/api/user/stores`, {
         method: "get",
         credentials: "include",
+        mode: "cors", 
     })
     const data = await response.json();
     return data
 }
 
 export const GetStoresByID = async (storeId: string) => {
-    const response = await fetch(`http://localhost:4000/api/user/stores/${storeId}`, {
+    const response = await fetch(`${origin}/api/user/stores/${storeId}`, {
         method: "get",
         credentials: "include",
+        mode: "cors", 
     })
     const data = await response.json();
     return data

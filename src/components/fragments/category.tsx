@@ -22,6 +22,7 @@ const Category = () => {
         if (response.statusCode === 200) {
             setData(response.data)
         }
+        console.log(response);
     }
 
     useEffect(() => {

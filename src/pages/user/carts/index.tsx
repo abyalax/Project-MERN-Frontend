@@ -19,7 +19,7 @@ interface GroupedCarts {
 const CartPage = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    // const [selectedCart, setSelectedCart] = useState<Cart[]>([]) //TODO
+    const [selectedCart, setSelectedCart] = useState<Cart[]>([])
     const dataUser = useSelector((state: RootState) => state.data)
     const stateCart = dataUser.carts
     const [carts, setCarts] = useState<Cart[]>(stateCart);
@@ -27,6 +27,7 @@ const CartPage = () => {
 
     const getDetail = async () => {
         const response = await GetCarts();
+        
         if (response.statusCode === 403) {
             navigate('/auth/login');
             return;
@@ -61,7 +62,7 @@ const CartPage = () => {
         return acc;
     }, {} as GroupedCarts);
 
-    const totalPrice = carts.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const totalPrice = selectedCart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
     const handleDeleteCart = async (productId: string) => {
         const updated = stateCart.filter(cart => cart.productId !== productId)
@@ -168,7 +169,7 @@ const CartPage = () => {
                         {/* Pilih Semua & Hapus */}
                         <div className="min-w-[50vw] bg-white rounded-t-2xl rounded-b-md px-6 py-4 flex justify-between">
                             <div className="h-full pl-2 pr-6 flex gap-6">
-                                <input type="checkbox" className="w-5 h-5" />
+                                <input type="checkbox" onChange={() => setSelectedCart(carts)} className="w-5 h-5" />
                                 <p className="text-lg font-bold">Pilih Semua ({carts.length})</p>
                             </div>
                             <button className="text-green-600 font-bold text-base">Hapus</button>
@@ -180,14 +181,14 @@ const CartPage = () => {
                                 <div key={storeName + Math.random()}>
                                     <div className="flex gap-1">
                                         <div className="pl-2 pr-6 h-full" >
-                                            <input type="checkbox" className="w-5 h-5" />
+                                            <input type="checkbox" onChange={() => alert(storeName)} className="w-5 h-5" />
                                         </div>
                                         <h3 className="text-lg font-bold">{storeName}</h3>
                                     </div>
                                     {groupedCarts[storeName].map((item) => (
                                         <div key={item.productId + Math.random()} className="flex flex-row border-b border-slate-200 my-4 py-2">
                                             <div className="h-full pl-2 pr-6">
-                                                <input type="checkbox" className="w-5 h-5" />
+                                                <input type="checkbox" onChange={() => alert(item.name)} className="w-5 h-5" />
                                             </div>
                                             <div className="flex justify-between items-center w-full">
                                                 <div className="flex gap-2">

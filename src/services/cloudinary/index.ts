@@ -1,3 +1,5 @@
+import { origin } from "../../utils/constant";
+
 export const uploadImages = async (files: File[]) => {
     const formData = new FormData();
   
@@ -5,9 +7,10 @@ export const uploadImages = async (files: File[]) => {
       formData.append('my_file', file);
     });
   
-    const response = await fetch('http://localhost:4000/cloud/upload', {
+    const response = await fetch(`${origin}/api/cloud/upload`, {
       method: "POST",
       credentials: "include",
+      mode: "cors", 
       body: formData,
     })
       .then((res) => res.json())
