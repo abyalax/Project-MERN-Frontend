@@ -1,6 +1,8 @@
 const originDevelopment = import.meta.env.VITE_ORIGIN_DEVELOPMENT
-const originProduction = import.meta.env.VITE_ORIGIN_PRODUCTION
+// const originProduction = import.meta.env.VITE_ORIGIN_PRODUCTION
 
-export const origin = originProduction ?? originDevelopment
-console.log("Available ENV: ",import.meta.env);
-console.log(origin, "From Utils Service");
+export const origin = originDevelopment
+
+export const token = localStorage.getItem("token")
+console.log("Token: ", token);
+

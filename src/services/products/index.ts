@@ -1,5 +1,5 @@
 import { Condition } from "../../types/products"
-import { origin } from "../../utils/constant"
+import { origin, token } from "../../utils/constant"
 
 interface Params {
     nameStore: string
@@ -20,7 +20,8 @@ export const CreateProduct = async (form: Params) => {
         credentials: "include",
         mode: "cors", 
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
             nameStore: form.nameStore,

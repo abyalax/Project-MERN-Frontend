@@ -1,9 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { image, svg } from "../../assets";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dropdown from "./dropdown";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
+import { GetStoresByID } from "../../services/stores";
+import { token } from "../../utils/constant";
 
 interface NavProps {
     classname?: string
@@ -14,13 +16,15 @@ const NavbarSeller = ({ classname }: NavProps) => {
     const [isOpen, setIsOpen] = useState(false)
     const navigate = useNavigate()
     const dataUser = useSelector((state: RootState) => state.data)
+    const [nameStore, setNameStore] = useState("")
 
     const logout = async () => {
         const response = await fetch('http://localhost:4000/api/auth/logout', {
             method: "post",
             credentials: "include",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
             },
         })
         const result = await response.json();
@@ -32,6 +36,22 @@ const NavbarSeller = ({ classname }: NavProps) => {
             alert('Something went wrong')
         }
     }
+
+    const getDetailStore = async () => {
+        if (dataUser.stores[0]) {
+            await GetStoresByID(dataUser.stores[0]).then((res) => {
+                if (res.statusCode === 200) {
+                    console.log("Detail Store at navbar", res.data);
+                    setNameStore(res.data.store)
+                }
+            })
+        }
+    }
+
+    useEffect(() => {
+        getDetailStore()
+        return () => { }
+    }, [])
 
     return (
         <nav className={classname}>
@@ -104,11 +124,10 @@ const NavbarSeller = ({ classname }: NavProps) => {
                                 onMouseLeave={() => document.getElementById('store')?.classList.add('hidden')}
                                 className="bg-transparent relative hover:bg-slate-200 rounded-lg py-2 px-3 flex gap-2 justify-center items-center">
                                 <img src={image.store} className="h-8 w-8 rounded-full" />
-                                Toko
+                                {nameStore ? nameStore.split(" ")[0] : ("Toko")}
                                 <Dropdown ID="store" custom="w-[290px] top-12 p-5">
-                                    <p className="font-semibold text-slate-500 text-sm text-center">Anda Belum Memiliki Toko</p>
-                                    <button className="bg-green-600 text-white font-semibold my-3 mx-[1.3rem] text-sm rounded-lg py-1.5 px-12">Buka Toko Gratis</button>
-                                    <p className="font-semibold text-slate-500 text-sm text-center">Tokomu Hilang ? <Link to={"#"} className="text-green-500">Pelajari Selengkapnya</Link></p>
+                                    <p className="font-semibold text-slate-500 text-sm text-center">{nameStore}</p>
+                                    <p className="font-semibold text-slate-500 text-sm text-center">Ada Masalah ? <Link to={"#"} className="text-green-500">Hubungi Kami</Link></p>
                                 </Dropdown>
                             </div>
 

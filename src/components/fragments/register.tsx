@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { svg } from "../../assets";
 import { AppDispatch } from "../../redux/store";
-import { Login, Register, VerifyEmail } from "../../redux/slice/userSlice";
+import { Login, RefreshData, Register, VerifyEmail } from "../../redux/slice/userSlice";
 import { attemptToVerify } from "../../services/auth";
 import { Register as RegisterService } from "../../services/auth";
 import { ToasterContext } from "../../context/toaster-context";
@@ -122,6 +122,13 @@ const RegisterForm = () => {
                 return
             }
             if (response.statusCode === 200) {
+                setToaster({
+                    variant: "success",
+                    message: "Registered successfully"
+                })
+                const token = `Bearer ${response.data.token}`
+                localStorage.setItem('token', token)
+                dispatch(RefreshData(response.data.user));
                 dispatch(Register(response.data.user))
                 dispatch(Login(true))
                 dispatch(VerifyEmail(response.data.user.verifiedEmail))

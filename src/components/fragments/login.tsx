@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../redux/store";
-import { Login, Register, VerifyEmail } from "../../redux/slice/userSlice";
+import { Login, RefreshData, Register, VerifyEmail } from "../../redux/slice/userSlice";
 import { Login as LoginService } from "../../services/auth";
 import { ToasterContext } from "../../context/toaster-context";
 import { useAppDispatch } from "../../redux/hooks";
@@ -62,9 +62,12 @@ const LoginForm = () => {
                 variant: "success",
                 message: "Login Success"
             })
+            const token = `Bearer ${response.data.token}`
+            localStorage.setItem('token', token)
             dispatch(VerifyEmail(response.data.user.verifiedEmail));
             dispatch(Register({ name: response.data.user.name, email: response.data.user.email }));
             dispatch(Login(true));
+            dispatch(RefreshData(response.data.user));
             setIsLoading(false)
             navigate("/home")
         } catch (error) {

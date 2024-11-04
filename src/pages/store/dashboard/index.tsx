@@ -13,47 +13,49 @@ import { ToasterContext } from "../../../context/toaster-context";
 const DashboardStore = () => {
     const navigate = useNavigate();
     const { setToaster } = useContext(ToasterContext)
-    const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState(true);
     const userId = useSelector((state: RootState) => state.data.stores[0]);
     console.log("userId from state store", userId);
 
     const [store, setStore] = useState<Stores>();
     console.log("store from state store", store?.store);
 
-    const getDetail = async (userId: string) => {
-        try {
-            console.log("Try Fetch with userId :", userId);
-            if (userId) {
-                const response = await GetStoresByID(userId)
-                if (response.statusCode === 200) {
-                    setStore(response.data)
-                }
-                if (response.statusCode === 403) {
-                    setStore(undefined)
-                    navigate('/auth/login')
-                }
-                if (response.statusCode === 404) {
-                    setStore(undefined)
-                    navigate('/store/create-store')
-                }
-            }
-        } catch (error) {
-            console.log(error);
-            console.error("Failed fetch Store data", error);
-            setToaster({
-                variant: "danger",
-                message: "Something wrong, try again later"
-            }); return
-        }
-    }
     useEffect(() => {
+        const getDetail = async (userId: string) => {
+            try {
+                console.log("Try Fetch with userId :", userId);
+                if (userId) {
+                    const response = await GetStoresByID(userId)
+                    if (response.statusCode === 200) {
+                        setStore(response.data)
+                    }
+                    if (response.statusCode === 403) {
+                        setStore(undefined)
+                        navigate('/auth/login')
+                    }
+                    if (response.statusCode === 404) {
+                        setStore(undefined)
+                        navigate('/store/create-store')
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+                console.error("Failed fetch Store data", error);
+                setToaster({
+                    variant: "danger",
+                    message: "Something wrong, try again later"
+                }); return
+            }
+        }
         getDetail(userId)
         const timer = setTimeout(() => {
             setShowModal(true);
         }, 2000);
 
+        setShowModal(false);
         return () => clearTimeout(timer);
-    }, [userId]);
+    }, [navigate, setToaster, userId]);
+
 
     return (
         <>
@@ -109,6 +111,9 @@ const DashboardStore = () => {
                 <>
                     <Modal>
                         <div className="max-w-96 p-2">
+                            <div className="w-full flex justify-end">
+                                <img src={svg.close} className="w-6 cursor-pointer" onClick={() => setShowModal(false)} />
+                            </div>
                             <img src={image.haloStore} className="w-80 mx-auto" />
                             <h1 className="text-xl font-bold text-center mt-6">{`Halo ${store.store.split(' ')[0]}, selamat datang di \n Tokopedia Seller`}</h1>
                             <p className="text-center text-slate-600 font-semibold my-2">{"Kelola toko jadi lebih mudah dengan tampilan baru.\n Pelajari dulu, yuk."}</p>

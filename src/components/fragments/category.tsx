@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Carousel from "./carousel";
-import { svg, image } from "../../assets";
-import { GetProducts } from "../../services/products";
-import { Product } from "../../types/products";
+import { svg, image, dummyProduct } from "../../assets";
 
 const Category = () => {
 
@@ -13,22 +11,16 @@ const Category = () => {
     const [hide, setHide] = useState(true);
     const [indexC, setIndexC] = useState(0);
 
-    const [data, setData] = useState<Product[]>([]);
     const location = useLocation()
     const pathname = location.pathname
 
-    const fetchData = async () => {
-        const response = await GetProducts()
-        if (response.statusCode === 200) {
-            setData(response.data)
-        }
-        console.log(response);
-    }
-
-    useEffect(() => {
-        fetchData()
-    }, [])
-
+    // const fetchData = async () => {
+    //     const response = await GetProducts()
+    //     if (response.statusCode === 200) {
+    //         setData(response.data)
+    //     }
+    //     console.log(response);
+    // }
 
     const routes = [
         {
@@ -101,15 +93,15 @@ const Category = () => {
                         <h2 className="text-xl font-bold">Kategori Pilihan</h2>
                         <div className="flex flex-nowrap overflow-hidden">
                             <div style={{
-                                transform: `translateX(-${currentIndex * (100 / data.length)}%)`,
+                                transform: `translateX(-${currentIndex * (100 / dummyProduct.length)}%)`,
                                 transition: 'transform 0.5s ease-in-out',
                             }} className="relative py-6 flex">
 
-                                {data.map((item, index: number) => (
+                                {dummyProduct.map((item, index: number) => (
                                     <div key={index} className="w-full px-2 flex items-center justify-center">
                                         {/* Konten Item */}
                                         <div className="h-32 w-32 border border-slate-200 rounded-lg flex justify-center items-center flex-col">
-                                            <img src={item.image[0].secure_url} className="h-14 w-14" />
+                                            <img src={item.url} className="h-14 w-14" />
                                             <p className=" text-wrap font-bold">{item.name.length > 10 ? item.name.substring(0, 10) + '...' : item.name}</p>
                                         </div>
                                     </div>
@@ -119,7 +111,7 @@ const Category = () => {
                         {/* Tombol Navigasi Sebelumnya */}
                         <button
                             className={`absolute left-4 top-1/2 transform -translate-y-1/2 transition-opacity duration-600 ${visible ? 'opacity-100' : 'opacity-0'}`}
-                            onClick={() => setCurrentIndex((prevIndex) => (prevIndex - 4 + data.length) % data.length)}
+                            onClick={() => setCurrentIndex((prevIndex) => (prevIndex - 4 + dummyProduct.length) % dummyProduct.length)}
                             style={{ pointerEvents: visible ? 'auto' : 'none' }}
                         >
                             <div className="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow">
@@ -132,7 +124,7 @@ const Category = () => {
                         {/* Tombol Navigasi Berikutnya */}
                         <button
                             className={`absolute right-4 top-1/2 transform -translate-y-1/2 transition-opacity duration-600 ${visible ? 'opacity-100' : 'opacity-0'}`}
-                            onClick={() => setCurrentIndex((prevIndex) => (prevIndex + 4) % data.length)}
+                            onClick={() => setCurrentIndex((prevIndex) => (prevIndex + 4) % dummyProduct.length)}
                             style={{ pointerEvents: visible ? 'auto' : 'none' }}
                         >
                             <div className="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow">

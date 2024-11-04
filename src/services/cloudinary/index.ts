@@ -1,4 +1,4 @@
-import { origin } from "../../utils/constant";
+import { origin, token } from "../../utils/constant";
 
 export const uploadImages = async (files: File[]) => {
     const formData = new FormData();
@@ -11,6 +11,9 @@ export const uploadImages = async (files: File[]) => {
       method: "POST",
       credentials: "include",
       mode: "cors", 
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
       body: formData,
     })
       .then((res) => res.json())

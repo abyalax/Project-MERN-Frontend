@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 
@@ -12,9 +12,9 @@ function VerifyEmail() {
     }
 
     const [searchParams] = useSearchParams();
-    const [verificationState, setVerificationState] = React.useState(VerificationState.pending);
+    const [verificationState, setVerificationState] = useState(VerificationState.pending);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const attemptToVerify = async () => {
             const code = searchParams.get("code");
             const email = searchParams.get("email");
@@ -25,7 +25,6 @@ function VerifyEmail() {
             const response = await fetch('http://localhost:4000/api/verify/verify-email', {
                 method: "post",
                 headers: {
-                    // needed so express parser says OK to read
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({

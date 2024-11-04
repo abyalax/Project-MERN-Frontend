@@ -67,16 +67,3 @@ export const Login = async (email: string, password: string) => {
     const data = await response.json();
     return data
 }
-
-export const logout = async () => {
-    const response = await fetch(`${origin}/api/auth/logout`, {
-        method: "post",
-        credentials: "include",
-        mode: "cors", 
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
-    const result = await response.json();
-    return result
-}

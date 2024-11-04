@@ -1,11 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { image, svg } from "../../assets";
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import Dropdown from "./dropdown";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { logout } from "../../services/auth";
-import { ToasterContext } from "../../context/toaster-context";
+import { GetStoresByID } from "../../services/stores";
 
 interface NavProps {
     classname?: string
@@ -16,35 +15,22 @@ const Navbar = ({ classname }: NavProps) => {
     const [isOpen, setIsOpen] = useState(false)
     const navigate = useNavigate()
     const dataUser = useSelector((state: RootState) => state.data)
-    const { setToaster } = useContext(ToasterContext)
-
-    const handleLogout = async () => {
-        try {
-            const response = await logout()
-            if (response.statusCode === 200) {
-                setToaster({
-                    variant: "success",
-                    message: "Logged out successfully"
-                })
-                localStorage.removeItem('persist:root')
-                navigate('/auth/login')
-            }
-            if (response.statusCode === 401) {
-                navigate('/auth/login')
-            }
-            if (response.statusCode === 403) {
-                navigate('/auth/login')
-            }
-            if (response.statusCode === 500) {
-                setToaster({
-                    variant: "danger",
-                    message: "Logout Failed, Internal Server Error",
+    const [nameStore, setNameStore] = useState("")
+    
+    useEffect(() => {
+        const getDetailStore = async () => {
+            if (dataUser.stores[0]) {
+                await GetStoresByID(dataUser.stores[0]).then((res) => {
+                    if (res.statusCode === 200) {
+                        setNameStore(res.data.store)
+                    } else {
+                        console.log(res);
+                    }
                 })
             }
-        } catch (error) {
-            console.error(error)
         }
-    }
+        getDetailStore()
+    }, [dataUser.stores])
 
     return (
         <nav className={classname}>
@@ -152,26 +138,34 @@ const Navbar = ({ classname }: NavProps) => {
                             </div>
                         </div>
 
-                        { dataUser.isLogin ? (
+                        {dataUser.isLogin ? (
                             <div className="col-span-2 flex gap-7 justify-center">
                                 <div onMouseOver={() => document.getElementById('store')?.classList.remove('hidden')}
                                     onMouseLeave={() => document.getElementById('store')?.classList.add('hidden')}
-                                    className="bg-transparent relative hover:bg-slate-200 rounded-lg py-2 px-3 flex gap-2 justify-center items-center">
+                                    className="bg-transparent relative hover:bg-slate-200 rounded-lg py-2 px-3 flex gap-2 justify-center items-center cursor-pointer">
                                     <img src={image.store} className="h-8 w-8 rounded-full" />
-                                    Toko
-                                    <Dropdown ID="store" custom="w-[290px] top-12 p-5">
-                                        <p className="font-semibold text-slate-500 text-sm text-center">Anda Belum Memiliki Toko</p>
-                                        <button onClick={() => navigate('/store/create-store')} className="bg-green-600 text-white font-semibold my-3 mx-[1.3rem] text-sm rounded-lg py-1.5 px-12">Buka Toko Gratis</button>
-                                        <p className="font-semibold text-slate-500 text-sm text-center">Tokomu Hilang ? <Link to={"#"} className="text-green-500">Pelajari Selengkapnya</Link></p>
-                                    </Dropdown>
+                                    {nameStore ? nameStore.split(" ")[0] : ("Toko")}
+                                    {nameStore ? (
+                                        <Dropdown ID="store" custom="w-[290px] top-12 p-5">
+                                            <p className="font-semibold text-slate-500 text-sm text-center">{nameStore}</p>
+                                            <button onClick={() => navigate('/store/home')} className="bg-green-600 text-white font-semibold my-3 mx-[2.8rem] text-sm rounded-lg py-1.5 px-12">Ke Toko</button>
+                                            <p className="font-semibold text-slate-500 text-sm text-center">Tokomu Hilang ? <Link to={"#"} className="text-green-500">Pelajari Selengkapnya</Link></p>
+                                        </Dropdown>
+                                    ) : (
+                                        <Dropdown ID="store" custom="w-[290px] top-12 p-5">
+                                            <p className="font-semibold text-slate-500 text-sm text-center">Anda Belum Memiliki Toko</p>
+                                            <button onClick={() => navigate('/store/create-store')} className="bg-green-600 text-white font-semibold my-3 mx-[1.3rem] text-sm rounded-lg py-1.5 px-12">Buka Toko Gratis</button>
+                                            <p className="font-semibold text-slate-500 text-sm text-center">Tokomu Hilang ? <Link to={"#"} className="text-green-500">Pelajari Selengkapnya</Link></p>
+                                        </Dropdown>
+                                    )}
                                 </div>
 
                                 <div onMouseOver={() => document.getElementById('profile')?.classList.remove('hidden')}
                                     onMouseLeave={() => document.getElementById('profile')?.classList.add('hidden')}
-                                    className="bg-transparent relative hover:bg-slate-200 rounded-lg py-2 px-3 flex gap-2 justify-center items-center"
+                                    className="bg-transparent relative hover:bg-slate-200 rounded-lg py-2 px-3 flex gap-2 justify-center items-center cursor-pointer"
                                     onClick={() => setIsOpen(!isOpen)}>
                                     <img src={image.profile} className="h-8 w-8 rounded-full" />
-                                    {dataUser.name}
+                                    {dataUser.name.split(" ")[0]}
                                     <Dropdown ID="profile" custom="w-[400px] top-10 px-0 right-0 ">
                                         <div className="flex items-center gap-2 w-[90%] p-3 mx-auto rounded-lg shadow-xl">
                                             <img src={image.profile} className="w-10 h-10 rounded-full" />
@@ -198,7 +192,7 @@ const Navbar = ({ classname }: NavProps) => {
                                     </Dropdown>
                                 </div>
                                 {isOpen && (
-                                    <button className="bg-red-300 z-10 absolute top-24 right-20 text-red-500 text-sm rounded-full py-2 px-4" onClick={handleLogout}>Logout</button>
+                                    <button className="bg-red-300 z-10 absolute top-24 right-20 text-red-500 text-sm rounded-full py-2 px-4" onClick={() => {localStorage.removeItem("token"); localStorage.removeItem("persist:root");navigate("/auth/login")}}>Logout</button>
                                 )}
                             </div>
                         ) : (

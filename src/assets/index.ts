@@ -56,6 +56,7 @@ import note from "./svg/note.svg"
 import addImage from "./svg/add-image.svg"
 import addVideo from "./svg/add-video.svg"
 import trash from "./svg/trash.svg"
+import close from "./svg/close.svg"
 
 import a from "./banners/1.png"
 import b from "./banners/2.png"
@@ -74,12 +75,19 @@ import c1 from "./img/product/Paket Perawatan/1.jpg"
 import c2 from "./img/product/Paket Perawatan/2.jpg"
 import c3 from "./img/product/Paket Perawatan/3.png"
 
+import batikwanita from "./dummy/batikwanita.jpg"
+import gantungan from "./dummy/gantungan.jpg"
+import kaospria from "./dummy/kaospria.jpg"
+import sepatuwanita from "./dummy/sepatuwanita.png"
+import tasselempang from "./dummy/tasselempangpria.jpg"
+
 const svg = {
     card, cart, person, chevron, chevronC, arrowR, secure, google,
     scan, search, notification, mail, phone, detail, all, star,
     facebook, twitter, pinterest, instagram, googlePlay, apple,
     bag, square, geo, clock, truck, chat, love, share, thumb,
-    settings, check, cookie, note, addImage, addVideo, trash
+    settings, check, cookie, note, addImage, addVideo, trash,
+    close
 }
 
 const image = {
@@ -103,5 +111,40 @@ const productImage = {
     ]
 }
 
+const dummyProduct = [
+    {
+        url : batikwanita,
+        name: "Batik Wanita"
+    },
+    {
+        url: gantungan,
+        name: "Gantungan"
+    },
+    {
+        url: kaospria,
+        name: "Kaos Pria"
+    },
+    {
+        url: sepatuwanita,
+        name: "Sepatu Wanita"
+    },
+    {
+        url: tasselempang,
+        name: "Tas Selempang"
+    },
+    {
+        url: kaospria,
+        name: "Kaos Pria"
+    },
+    {
+        url: sepatuwanita,
+        name: "Sepatu Wanita"
+    },
+    {
+        url: tasselempang,
+        name: "Tas Selempang"
+    },
+]
 
-export { svg, image, banners, productImage }
+
+export { svg, image, banners, productImage, dummyProduct }

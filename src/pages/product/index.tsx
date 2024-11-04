@@ -181,7 +181,7 @@ const ProductPage = () => {
                             <h2 className="text-slate-600">Min Pemesanan : <span className="text-black">{product?.minOrder}</span></h2>
                             <h2 className="text-slate-600">Etalase : <span className="text-green-600 font-bold">{product?.etalase}</span></h2>
                             <p className="text-base mt-2">
-                                {product?.description}
+                                {product?.description.slice(0, 200) + "..."}
                             </p>
                             <b className="text-green-600 text-sm font-bold">lihat selengkapnya</b>
                         </div>

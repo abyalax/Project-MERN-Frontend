@@ -3,7 +3,8 @@ import Toaster from "../components/ui/toaster"
 
 const ToasterContext = createContext({
     toaster: {},
-    setToaster: ({ }) => {
+    // eslint-disable-next-line no-empty-pattern
+    setToaster: ({}) => {
 
     }
 })

@@ -1,12 +1,14 @@
 import { Cart } from "../../types/products";
-import { origin } from "../../utils/constant";
+import { origin, token } from "../../utils/constant";
+
 export const AddToCart = async (form: Cart) => {
     const response = await fetch(`${origin}/api/user/carts`, {
         method: "post",
         credentials: "include",
         mode: "cors", 
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
             productId: form.productId,
@@ -29,7 +31,8 @@ export const GetCarts = async () => {
         credentials: "include",
         mode: "cors", 
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
         },
     })
     const data = await response.json();
@@ -43,7 +46,8 @@ export const DeleteCart = async (productId: string) => {
         credentials: "include",
         mode: "cors", 
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
             productId
@@ -60,7 +64,8 @@ export const UpdateCartByID = async (cart: Cart) => {
         credentials: "include",
         mode: "cors", 
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
             cart

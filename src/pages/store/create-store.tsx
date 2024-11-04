@@ -13,6 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../index.css"
 import { useAppDispatch } from "../../redux/hooks";
 import { ToasterContext } from "../../context/toaster-context";
+import { token } from "../../utils/constant";
 
 const CreateStore = () => {
 
@@ -111,6 +112,9 @@ const CreateStore = () => {
         const response = await fetch("http://localhost:4000/api/auth/user", {
           method: "GET",
           credentials: "include",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
         });
         const result = await response.json();
         console.log(result);
